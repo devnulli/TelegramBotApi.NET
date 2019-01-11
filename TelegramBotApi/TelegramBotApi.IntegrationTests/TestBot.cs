@@ -11,6 +11,7 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
+            //this (70033...) is an example API key from a deleted bot. //do NOT CHECK in this file with your test Bots real Key!
             b = TelegramBot.GetBot("700338044:AAErW5RbuZNayYPR11fOBnbn1DM1qwuj4ss");
         }
 
