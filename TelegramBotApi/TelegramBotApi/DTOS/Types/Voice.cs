@@ -2,29 +2,20 @@
 
 namespace nerderies.TelegramBotApi.DTOS
 {
-    public class Audio
+    public class Voice
     {
-        //complete API as of 2019-01-10
+        //complete API as of 2019-01-11
 
         [JsonProperty("file_id")]
-        public string FileID;
+        public string FileId;
 
         [JsonProperty("duration")]
         public long Duration;
-
-        [JsonProperty("performer")]
-        public long Performer;
-
-        [JsonProperty("title")]
-        public long Title;
 
         [JsonProperty("mime_type")]
         public string MimeType;
 
         [JsonProperty("file_size")]
         public long FileSize;
-
-        [JsonProperty("thumb")]
-        public PhotoSize ThumbNail;
     }
 }
