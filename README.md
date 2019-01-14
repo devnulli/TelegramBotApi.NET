@@ -7,7 +7,8 @@ Although its for simple use, the target is to keep track and implement all of Te
 
 ## The easiest case
 Although the library intends to cover all of Telegrams Bot API, and complex usecases, the most simple Bot would look like this:
-![easiest case](other Resources/easiest case.png)
+
+![easiest case](https://github.com/devnulli/TelegramBotApi.NET/raw/master/other%20Resources/easiest%20case.PNG)
 
 
 ## Tutorial
