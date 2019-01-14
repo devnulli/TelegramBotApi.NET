@@ -12,14 +12,17 @@ namespace nerderies.TelegramBotApi
 
         private string _authenticationToken = null;
         private WebClient _webClient = new WebClient();
+        private long _rateLimitingMilliSeconds = 0;
+        private DateTime _lastRequest = DateTime.MinValue;
 
         #endregion
 
         #region .ctor
 
-        public Communicator(string authenticationToken)
+        public Communicator(string authenticationToken, long rateLimitingMilliSeconds)
         {
             _authenticationToken = authenticationToken;
+            _rateLimitingMilliSeconds = rateLimitingMilliSeconds;
         }
 
         #endregion
@@ -50,6 +53,19 @@ namespace nerderies.TelegramBotApi
             return url;
         }
 
+        private string GetRateLimitedReply(string url)
+        {
+            lock(this)
+            {
+                while(_rateLimitingMilliSeconds != 0 && DateTime.Now < _lastRequest.AddMilliseconds(_rateLimitingMilliSeconds))
+                {
+                    System.Threading.Thread.Sleep(10);
+                }
+                _lastRequest = DateTime.Now;
+                return _webClient.DownloadString(url);
+            }
+        }
+
         #endregion
 
         #region public operations
@@ -63,7 +79,7 @@ namespace nerderies.TelegramBotApi
         {
             var url = BuildOperationUrl(operationName, parameters);
 
-            var json = _webClient.DownloadString(url);
+            var json = GetRateLimitedReply(url);
 
             T result = JsonConvert.DeserializeObject<T>(json);
 
