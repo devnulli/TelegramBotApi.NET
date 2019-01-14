@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TelegramBotApi
+namespace nerderies.TelegramBotApi
 {
     internal class Constants
     {

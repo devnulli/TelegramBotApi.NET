@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TelegramBotApi.Interfaces
+namespace nerderies.TelegramBotApi.Interfaces
 {
     public interface ICommunicator
     {

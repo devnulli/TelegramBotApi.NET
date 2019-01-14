@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TelegramBotApi.Interfaces;
+using nerderies.TelegramBotApi.Interfaces;
 
-namespace TelegramBotApi
+namespace nerderies.TelegramBotApi
 {
     public class TelegramBot
     {
@@ -65,6 +65,40 @@ namespace TelegramBotApi
                 _updateOffset = reply.Updates[reply.Updates.Length - 1].UpdateId + 1;
 
             return new List<Message>(from u in reply.Updates select u.Message);
+        }
+
+        /// <summary>
+        /// Gets the User object of this bot.
+        /// </summary>
+        /// <returns>A User object with infos about the bot</returns>
+        public User GetMe()
+        {
+            User me = _communicator.GetReply<GetMeReply>("getMe").Result;
+            return me;
+        }
+
+        /// <summary>
+        /// Sends a Message to a chat
+        /// </summary>
+        /// <param name="chatId"></param>
+        /// <param name="text"></param>
+        /// <returns>on success, the sent Message is returned </returns>
+        public Message SendMessage(long chatId, string text)
+        {
+            if (text.Length > Constants.MaxTextLength)
+                text = text.Substring(0, Constants.MaxTextLength - 3) + "...";
+
+            var parameters = new QueryStringParameter[]
+            {
+                new QueryStringParameter("chat_id", chatId.ToString()),
+                new QueryStringParameter("text", text)
+            };
+
+            var result = _communicator.GetReply<SendMessageReply>("sendMessage", parameters);
+            if (result.OK)
+                return result.sentMessage;
+            else
+                return null;
         }
 
         #endregion

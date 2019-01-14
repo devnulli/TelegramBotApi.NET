@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using nerderies.TelegramBotApi;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;

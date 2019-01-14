@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net;
 using nerderies.TelegramBotApi.DTOS;
+using nerderies.TelegramBotApi.Interfaces;
 using Newtonsoft.Json;
-using TelegramBotApi.Interfaces;
 
-namespace TelegramBotApi
+namespace nerderies.TelegramBotApi
 {
     internal class Communicator : ICommunicator
     {

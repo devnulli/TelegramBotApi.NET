@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace TelegramBotApi
+namespace nerderies.TelegramBotApi
 {
     public class QueryStringParameter
     {
