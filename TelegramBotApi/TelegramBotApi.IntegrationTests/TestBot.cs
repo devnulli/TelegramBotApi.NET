@@ -115,5 +115,11 @@ namespace Tests
             Assert.Null(message2.ReplyToMessage);
             Assert.That(message2.Photos.Length > 0);
         }
+
+        [Test]
+        public void SendChatAction_Return()
+        {
+            Assert.True(b.SendChatAction(_testMessage.Chat, ChatAction.UploadDocument));
+        }
     }
 }

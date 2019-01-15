@@ -199,6 +199,28 @@ namespace nerderies.TelegramBotApi
             else
                 return null;
         }
+
+        /// <summary>
+        /// The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status)
+        /// </summary>
+        /// <returns>True if successful</returns>
+        public bool SendChatAction(Chat chat, ChatAction chatAction)
+        {
+            var parameters = new List<QueryStringParameter>()
+            {
+                new QueryStringParameter("chat_id", chat.Id.ToString()),
+                new QueryStringParameter("action", chatAction.Code)
+            };
+
+            var reply = _communicator.GetReply<SendChatActionReply>("sendChatAction", parameters.ToArray());
+            if (reply.Ok)
+            {
+                return reply.Result;
+            }
+            else
+                return false;
+            
+        }
         #endregion
     }
 }
