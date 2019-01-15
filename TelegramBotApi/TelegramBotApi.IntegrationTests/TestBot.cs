@@ -49,13 +49,13 @@ namespace Tests
         [Test]
         public void SendMessage_Basic_Returns()
         {
-            Assert.NotNull(b.SendMessage(_testMessage.Chat.Id, "SendMessage_Basic_Returns") != null);
+            Assert.NotNull(b.SendMessage(_testMessage.Chat, "SendMessage_Basic_Returns") != null);
         }
 
         [Test]
         public void SendMessage_ReplyTo_Returns()
         {
-            Assert.NotNull(b.SendMessage(_testMessage.Chat.Id, "SendMessage_ReplyTo_Returns", _testMessage));
+            Assert.NotNull(b.SendMessage(_testMessage.Chat, "SendMessage_ReplyTo_Returns", _testMessage));
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace Tests
                 "<code>inline fixed-width code</code>\n" +
                 "<pre>pre-formatted fixed-width code block</pre>";
 
-            Assert.NotNull(b.SendMessage(_testMessage.Chat.Id, testText, _testMessage, TelegramBot.MarkdownStyles.HTML));
+            Assert.NotNull(b.SendMessage(_testMessage.Chat, testText, _testMessage, TelegramBot.MarkdownStyles.HTML));
         }
 
         [Test]
@@ -82,14 +82,14 @@ namespace Tests
                 "```block_language\n" +
                 "pre-formatted fixed-width code block ```";
 
-            Assert.NotNull(b.SendMessage(_testMessage.Chat.Id, testText, _testMessage, TelegramBot.MarkdownStyles.Markdown));
+            Assert.NotNull(b.SendMessage(_testMessage.Chat, testText, _testMessage, TelegramBot.MarkdownStyles.Markdown));
         }
 
         [Test]
         public void SendMessage_DisableWeb_Page_Preview_Returns()
         {
-            Assert.NotNull(b.SendMessage(_testMessage.Chat.Id, "no preview: check this out http://www.derstandard.at", _testMessage, disableWebPagePreview: true));
-            Assert.NotNull(b.SendMessage(_testMessage.Chat.Id, "preview: check this out http://www.derstandard.at", _testMessage, disableWebPagePreview: false));
+            Assert.NotNull(b.SendMessage(_testMessage.Chat, "no preview: check this out http://www.derstandard.at", _testMessage, disableWebPagePreview: true));
+            Assert.NotNull(b.SendMessage(_testMessage.Chat, "preview: check this out http://www.derstandard.at", _testMessage, disableWebPagePreview: false));
         }
 
         [Test]

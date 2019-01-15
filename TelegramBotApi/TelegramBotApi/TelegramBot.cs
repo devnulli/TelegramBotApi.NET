@@ -85,7 +85,7 @@ namespace nerderies.TelegramBotApi
         }
 
         /// <summary>
-        /// Gets the User object of this bot.
+        /// Gets the User object for this bot.
         /// </summary>
         /// <returns>A User object with infos about the bot</returns>
         public User GetMe()
@@ -95,19 +95,19 @@ namespace nerderies.TelegramBotApi
         }
 
         /// <summary>
-        /// Sends a Message to a chat
+        /// Sends a message to a chat
         /// </summary>
         /// <param name="chatId"></param>
         /// <param name="text"></param>
         /// <returns>on success, the sent Message is returned </returns>
-        public Message SendMessage(long chatId, string text, Message replyToMessage = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool disableWebPagePreview = false)
+        public Message SendMessage(Chat chat, string text, Message replyToMessage = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool disableWebPagePreview = false)
         {
             if (text.Length > Constants.MaxTextLength)
                 text = text.Substring(0, Constants.MaxTextLength - 3) + "...";
 
             var parameters = new List<QueryStringParameter>
             {
-                new QueryStringParameter("chat_id", chatId.ToString()),
+                new QueryStringParameter("chat_id", chat.Id.ToString()),
                 new QueryStringParameter("text", text)
             };
 
