@@ -26,6 +26,9 @@ namespace nerderies.TelegramBotApi
 
         public Communicator(string authenticationToken, long rateLimitingMilliSeconds)
         {
+            if (rateLimitingMilliSeconds < 0)
+                throw new ArgumentException("rateLimiting cannot make the telegram bot work faster than light (it must be positive)");
+
             _webClient.Headers.Add(HttpRequestHeader.UserAgent, UserAgentString);
             _authenticationToken = authenticationToken ?? throw new ArgumentNullException();
             _rateLimitingMilliSeconds = rateLimitingMilliSeconds;

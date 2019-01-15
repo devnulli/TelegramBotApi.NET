@@ -21,7 +21,6 @@ namespace nerderies.TelegramBotApi
 
         #region public static operations
 
-        //this is for easy use
         public static TelegramBot GetBot(string token, bool rateLimiting = false)
         {
             var c = new Communicator(token, rateLimiting ? Constants.DefaultRateLimitingTimeInMilliSeconds : 0);
@@ -32,7 +31,7 @@ namespace nerderies.TelegramBotApi
 
         #region private members
 
-        private object _syncObject = new object();
+        private readonly object _syncObject = new object();
         private long _updateOffset = 0;
         private ICommunicator _communicator = null;
 
@@ -166,14 +165,33 @@ namespace nerderies.TelegramBotApi
         /// <param name="fileName">the filename the picture has</param>
         /// <param name="mime"></param>
         /// <returns></returns>
-        public Message SendPhoto(Chat chat, byte[] data, string fileName, string mime)
+        public Message SendPhoto(Chat chat, TelegramFile photo, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool disableNotification = false, Message replyToMessage = null)
         {
             var parameters = new List<MultiPartParameter>
             {
                 new MultiPartStringParameter("chat_id", chat.Id.ToString()),
-                new MultiPartFileParameter("photo", fileName, data, mime)
+                photo.GetMultiPartParameter("photo")
             };
 
+            if(caption!=null)
+            {
+                parameters.Add(new MultiPartStringParameter("caption", caption));
+            }
+
+            if (markdownStyle != MarkdownStyles.None)
+            {
+                parameters.Add(new MultiPartStringParameter("parse_mode", Enum.GetName(typeof(MarkdownStyles), markdownStyle)));
+            }
+
+            if (disableNotification)
+            {
+                parameters.Add(new MultiPartStringParameter("disable_notification", disableNotification.ToString()));
+            }
+
+            if (replyToMessage != null)
+            {
+                parameters.Add(new MultiPartStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
+            }
             var result = _communicator.GetMultiPartReply<SendPictureReply>("sendPhoto", parameters.ToArray());
 
             if (result.Ok)

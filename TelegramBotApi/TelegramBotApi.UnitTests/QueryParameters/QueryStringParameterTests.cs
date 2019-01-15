@@ -1,8 +1,7 @@
-﻿using nerderies.TelegramBotApi;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 
-namespace TelegramBotApi.UnitTests
+namespace nerderies.TelegramBotApi.UnitTests.Parameters
 {
     public class QueryStringParameterTests
     {

@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 
-namespace nerderies.TelegramBotApi.UnitTests
+namespace nerderies.TelegramBotApi.UnitTests.Parameters
 {
     public class MultipartStringParameterTests
     {

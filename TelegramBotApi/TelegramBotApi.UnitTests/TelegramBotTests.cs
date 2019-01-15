@@ -1,9 +1,7 @@
-using nerderies.TelegramBotApi;
 using NUnit.Framework;
 using System;
-using TelegramBotApi;
 
-namespace TelegramBotApi.UnitTests
+namespace nerderies.TelegramBotApi.UnitTests
 {
     public class TelegramBotTests
     {
