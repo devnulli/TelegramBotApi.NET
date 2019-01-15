@@ -1,13 +1,13 @@
-﻿using System.Xml.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace nerderies.TelegramBotApi.DTOS
 {
-    [XmlRootAttribute(ElementName = "root")]
     public class SendPictureReply : Reply
     {
-        [XmlElement(ElementName = "ok")]
-        public bool OK;
+        [JsonProperty("ok")]
+        public bool Ok;
 
-        public Message sentMessage;
+        [JsonProperty("result")]
+        public Message SentMessage;
     }
 }

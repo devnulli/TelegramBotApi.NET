@@ -19,6 +19,6 @@ namespace nerderies.TelegramBotApi.DTOS
         public string Url;
 
         [JsonProperty("user")]
-        public string User;
+        public User User;
     }
 }

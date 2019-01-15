@@ -1,8 +1,6 @@
 ﻿using nerderies.TelegramBotApi;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TelegramBotApi.UnitTests
 {
@@ -14,7 +12,6 @@ namespace TelegramBotApi.UnitTests
             Assert.Throws<ArgumentException>(() => new QueryStringParameter(null, "A"));
             Assert.Throws<ArgumentException>(() => new QueryStringParameter("A",null));
             Assert.Throws<ArgumentException>(() => new QueryStringParameter(null, null));
-            Assert.DoesNotThrow(() => new QueryStringParameter("A", "B"));
         }
     }
 }

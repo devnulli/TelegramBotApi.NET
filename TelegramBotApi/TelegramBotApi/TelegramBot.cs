@@ -8,12 +8,17 @@ namespace nerderies.TelegramBotApi
 {
     public class TelegramBot
     {
+        #region public types
+
         public enum MarkdownStyles
         {
             HTML,
             Markdown,
             None
         }
+
+        #endregion
+
         #region public static operations
 
         //this is for easy use
@@ -39,7 +44,10 @@ namespace nerderies.TelegramBotApi
         /// creates a new instance of a TelegramBot class
         /// </summary>
         /// <param name="authenticationToken">the authentication token you received from telegram.</param>
-        public TelegramBot(ICommunicator communicator) => _communicator = communicator;
+        public TelegramBot(ICommunicator communicator)
+        {
+            _communicator = communicator ?? throw new ArgumentNullException();
+        }
 
         #endregion
 
@@ -93,7 +101,7 @@ namespace nerderies.TelegramBotApi
         /// <param name="chatId"></param>
         /// <param name="text"></param>
         /// <returns>on success, the sent Message is returned </returns>
-        public Message SendMessage(long chatId, string text, Message replyToMessage = null, MarkdownStyles markdownStyle = MarkdownStyles.None)
+        public Message SendMessage(long chatId, string text, Message replyToMessage = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool disableWebPagePreview = false)
         {
             if (text.Length > Constants.MaxTextLength)
                 text = text.Substring(0, Constants.MaxTextLength - 3) + "...";
@@ -114,14 +122,65 @@ namespace nerderies.TelegramBotApi
                 parameters.Add(new QueryStringParameter("parse_mode", Enum.GetName(typeof(MarkdownStyles), markdownStyle)));
             }
 
+            if(disableWebPagePreview)
+            {
+                parameters.Add(new QueryStringParameter("disable_web_page_preview", true.ToString()));
+            }
 
             var result = _communicator.GetReply<SendMessageReply>("sendMessage", parameters.ToArray());
-            if (result.OK)
-                return result.sentMessage;
+
+            if (result.Ok)
+                return result.SentMessage;
             else
                 return null;
         }
 
+        /// <summary>
+        /// forwards a message 
+        /// </summary>
+        /// <param name="messageToForward">the Message that will be forwarded</param>
+        /// <param name="chatToForwardTo">the Chat to forward it to</param>
+        /// <param name="disableNotification">forwards it without notification when set to true</param>
+        /// <returns>if successful, the sent message is returned</returns>
+        public Message ForwardMessage(Message messageToForward, Chat chatToForwardTo, bool disableNotification = false)
+        {
+            List<QueryStringParameter> parameters = new List<QueryStringParameter>()
+            {
+                new QueryStringParameter("chat_id", chatToForwardTo.Id.ToString()),
+                new QueryStringParameter("from_chat_id", messageToForward.Chat.Id.ToString()),
+                new QueryStringParameter("message_id", messageToForward.MessageId.ToString())
+            };
+
+            var result = _communicator.GetReply<ForwardMessageReply>("forwardMessage", parameters.ToArray());
+            if (result.Ok)
+                return result.SentMessage;
+            else
+                return null;
+        }
+
+        /// <summary>
+        /// sends a photo to the chat
+        /// </summary>
+        /// <param name="chat">the Chat to send the photo to</param>
+        /// <param name="data">the content of the picture as byte array</param>
+        /// <param name="fileName">the filename the picture has</param>
+        /// <param name="mime"></param>
+        /// <returns></returns>
+        public Message SendPhoto(Chat chat, byte[] data, string fileName, string mime)
+        {
+            var parameters = new List<MultiPartParameter>
+            {
+                new MultiPartStringParameter("chat_id", chat.Id.ToString()),
+                new MultiPartFileParameter("photo", fileName, data, mime)
+            };
+
+            var result = _communicator.GetMultiPartReply<SendPictureReply>("sendPhoto", parameters.ToArray());
+
+            if (result.Ok)
+                return result.SentMessage;
+            else
+                return null;
+        }
         #endregion
     }
 }
