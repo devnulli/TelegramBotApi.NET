@@ -97,11 +97,14 @@ namespace nerderies.TelegramBotApi
         /// <summary>
         /// Sends a message to a chat
         /// </summary>
-        /// <param name="chatId"></param>
-        /// <param name="text"></param>
         /// <returns>on success, the sent Message is returned </returns>
-        public Message SendMessage(Chat chat, string text, Message replyToMessage = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool disableWebPagePreview = false)
+        public Message SendMessage(Chat chat, string text, MarkdownStyles markdownStyle = MarkdownStyles.None, bool disableWebPagePreview = false, bool disableNotification = false, Message replyToMessage = null)
         {
+            if (chat == null || text == null)
+                throw new ArgumentNullException();
+            if (string.IsNullOrEmpty(text))
+                throw new ArgumentException("text cannot be empty");
+
             if (text.Length > Constants.MaxTextLength)
                 text = text.Substring(0, Constants.MaxTextLength - 3) + "...";
 
@@ -111,11 +114,6 @@ namespace nerderies.TelegramBotApi
                 new QueryStringParameter("text", text)
             };
 
-            if(replyToMessage!=null)
-            {
-                parameters.Add(new QueryStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
-            }
-
             if(markdownStyle!= MarkdownStyles.None)
             {
                 parameters.Add(new QueryStringParameter("parse_mode", Enum.GetName(typeof(MarkdownStyles), markdownStyle)));
@@ -124,6 +122,16 @@ namespace nerderies.TelegramBotApi
             if(disableWebPagePreview)
             {
                 parameters.Add(new QueryStringParameter("disable_web_page_preview", true.ToString()));
+            }
+
+            if (disableNotification)
+            {
+                parameters.Add(new QueryStringParameter("disable_notification", true.ToString()));
+            }
+
+            if (replyToMessage != null)
+            {
+                parameters.Add(new QueryStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
             }
 
             var result = _communicator.GetReply<SendMessageReply>("sendMessage", parameters.ToArray());
@@ -143,6 +151,9 @@ namespace nerderies.TelegramBotApi
         /// <returns>if successful, the sent message is returned</returns>
         public Message ForwardMessage(Message messageToForward, Chat chatToForwardTo, bool disableNotification = false)
         {
+            if (chatToForwardTo == null || messageToForward == null)
+                throw new ArgumentNullException();
+
             List<QueryStringParameter> parameters = new List<QueryStringParameter>()
             {
                 new QueryStringParameter("chat_id", chatToForwardTo.Id.ToString()),
@@ -160,13 +171,12 @@ namespace nerderies.TelegramBotApi
         /// <summary>
         /// sends a photo to the chat
         /// </summary>
-        /// <param name="chat">the Chat to send the photo to</param>
-        /// <param name="data">the content of the picture as byte array</param>
-        /// <param name="fileName">the filename the picture has</param>
-        /// <param name="mime"></param>
-        /// <returns></returns>
+        /// <returns>on success, the sent Message is returned </returns>
         public Message SendPhoto(Chat chat, TelegramFile photo, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool disableNotification = false, Message replyToMessage = null)
         {
+            if (chat == null || photo == null)
+                throw new ArgumentNullException();
+
             var parameters = new List<MultiPartParameter>
             {
                 new MultiPartStringParameter("chat_id", chat.Id.ToString()),
@@ -192,6 +202,7 @@ namespace nerderies.TelegramBotApi
             {
                 parameters.Add(new MultiPartStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
             }
+
             var result = _communicator.GetMultiPartReply<SendPictureReply>("sendPhoto", parameters.ToArray());
 
             if (result.Ok)
@@ -201,7 +212,54 @@ namespace nerderies.TelegramBotApi
         }
 
         /// <summary>
-        /// The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status)
+        /// sends an audio file to the chat
+        /// </summary>
+        /// <returns>on success, the sent Message is returned</returns>
+        public Message SendAudio(Chat chat, TelegramFile audio, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, long duration = long.MinValue, string performer = null, string title = null, TelegramFile thumb = null, bool disableNotification = false, Message replyToMessage = null)
+        {
+            if (chat == null || audio == null)
+                throw new ArgumentNullException();
+
+            var parameters = new List<MultiPartParameter>
+            {
+                new MultiPartStringParameter("chat_id", chat.Id.ToString()),
+                audio.GetMultiPartParameter("audio")
+            };
+
+            if (caption != null)
+                parameters.Add(new MultiPartStringParameter("caption", caption));
+
+            if (markdownStyle != MarkdownStyles.None)
+                parameters.Add(new MultiPartStringParameter("parse_mode", Enum.GetName(typeof(MarkdownStyles), markdownStyle)));
+
+            if(duration > long.MinValue)
+                parameters.Add(new MultiPartStringParameter("duration", duration.ToString()));
+
+            if (!string.IsNullOrEmpty(performer))
+                parameters.Add(new MultiPartStringParameter("performer", performer));
+
+            if (!string.IsNullOrEmpty(title))
+                parameters.Add(new MultiPartStringParameter("title", title));
+
+            if (thumb != null)
+                parameters.Add(thumb.GetMultiPartParameter("thumb"));
+
+            if (disableNotification)
+                parameters.Add(new MultiPartStringParameter("disable_notification", disableNotification.ToString()));
+
+            if (replyToMessage != null)
+                parameters.Add(new MultiPartStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
+
+            var result = _communicator.GetMultiPartReply<SendPictureReply>("sendAudio", parameters.ToArray());
+
+            if (result.Ok)
+                return result.SentMessage;
+            else
+                return null;
+        }
+
+        /// <summary>
+        /// The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients also clear your bot status)
         /// </summary>
         /// <returns>True if successful</returns>
         public bool SendChatAction(Chat chat, ChatAction chatAction)

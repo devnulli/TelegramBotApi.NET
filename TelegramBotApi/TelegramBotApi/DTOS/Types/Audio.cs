@@ -13,10 +13,10 @@ namespace nerderies.TelegramBotApi.DTOS
         public long Duration;
 
         [JsonProperty("performer")]
-        public long Performer;
+        public string Performer;
 
         [JsonProperty("title")]
-        public long Title;
+        public string Title;
 
         [JsonProperty("mime_type")]
         public string MimeType;
