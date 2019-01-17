@@ -16,4 +16,10 @@
     <ProjectReference Include="..\TelegramBotApi\TelegramBotApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="testobjects.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
