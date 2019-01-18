@@ -34,7 +34,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             }
             catch(Exception)
             {
-                throw new Exception($"You must first set up a test bot for integration testing and make sure that there is a *.testtoken file in {documentsPath}\rAlso, the bot should have at least one message in his backlog");
+                throw new Exception($"You must first (A) set up a test bot for integration testing (B) make sure that there is a *.testtoken file containing the bots token in {documentsPath} (C) The bot should have at least one message in his backlog");
             }
             
         }
