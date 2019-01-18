@@ -2,7 +2,7 @@
 
 namespace nerderies.TelegramBotApi.DTOS
 {
-    public class SendDocumentReply : Reply
+    public class SendVideoReply : Reply
     {
         [JsonProperty("ok")]
         public bool Ok;

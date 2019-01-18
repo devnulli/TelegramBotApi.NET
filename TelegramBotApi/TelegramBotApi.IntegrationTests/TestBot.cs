@@ -99,15 +99,15 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         [Test]
         public void ForwardMessage_Returns()
         {
-            Assert.NotNull(_b.ForwardMessage(_testMessage, _testMessage.Chat));
-            Assert.NotNull(_b.ForwardMessage(_testMessage, _testMessage.Chat, disableNotification: true));
+            var r1 = _b.ForwardMessage(_testMessage, _testMessage.Chat);
+            Assert.NotNull(r1);
+            Assert.NotNull(r1.ForwardFrom);
         }
 
         [Test]
         public void SendPhoto_Returns()
         {
-            string photo = "\"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\"";
-            byte[] bytes = JsonConvert.DeserializeObject<byte[]>(photo);
+            byte[] bytes = _testobjects.TestPhoto;
 
             var message = _b.SendPhoto(_testMessage.Chat, new TelegramFile(bytes, "testimage", "img/gif"), caption: "caption", replyToMessage: _testMessage);
             Assert.NotNull(message);
@@ -131,6 +131,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         {
             var m1 = _b.SendAudio(_testMessage.Chat, new TelegramFile(_testobjects.TestAudio, "test", "audio/mpeg"), thumb: new TelegramFile(_testobjects.TestThumb, "thumb", "img/jpeg"), performer: "cat", title: "testaudio");
             Assert.NotNull(m1);
+            Assert.NotNull(m1.Audio);
         }
 
         [Test]
@@ -138,7 +139,18 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         {
             var m1 = _b.SendDocument(_testMessage.Chat, new TelegramFile(_testobjects.TestAudio, "testdocument", "audio/mpeg"), thumb: new TelegramFile(_testobjects.TestThumb, "thumb", "img/jpeg"));
             Assert.NotNull(m1);
+            Assert.NotNull(m1.Document);
             var m2 = _b.SendDocument(_testMessage.Chat, new TelegramFile(m1.Document.FileId), thumb: new TelegramFile(m1.Document.Thumb.FileId));
+            Assert.NotNull(m2);
+            Assert.NotNull(m2.Document);
+        }
+
+        [Test]
+        public void SendVideo_Returns()
+        {
+            var m1 = _b.SendVideo(_testMessage.Chat, new TelegramFile(_testobjects.TestVideo, "light.mp4", "video/mp4"), thumb:new TelegramFile(_testobjects.TestThumb, "testthumb", "img/jpeg"));
+            Assert.NotNull(m1);
+            Assert.NotNull(m1.Video);
         }
     }
 }

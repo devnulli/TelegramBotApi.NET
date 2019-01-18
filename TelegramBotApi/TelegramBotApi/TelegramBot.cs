@@ -203,7 +203,7 @@ namespace nerderies.TelegramBotApi
                 parameters.Add(new MultiPartStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
             }
 
-            var result = _communicator.GetMultiPartReply<SendPictureReply>("sendPhoto", parameters.ToArray());
+            var result = _communicator.GetMultiPartReply<SendPhotoReply>("sendPhoto", parameters.ToArray());
 
             if (result.Ok)
                 return result.SentMessage;
@@ -250,7 +250,7 @@ namespace nerderies.TelegramBotApi
             if (replyToMessage != null)
                 parameters.Add(new MultiPartStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
 
-            var result = _communicator.GetMultiPartReply<SendPictureReply>("sendAudio", parameters.ToArray());
+            var result = _communicator.GetMultiPartReply<SendAudioReply>("sendAudio", parameters.ToArray());
 
             if (result.Ok)
                 return result.SentMessage;
@@ -288,7 +288,53 @@ namespace nerderies.TelegramBotApi
             if (replyToMessage != null)
                 parameters.Add(new MultiPartStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
 
-            var result = _communicator.GetMultiPartReply<SendPictureReply>("sendDocument", parameters.ToArray());
+            var result = _communicator.GetMultiPartReply<SendDocumentReply>("sendDocument", parameters.ToArray());
+
+            if (result.Ok)
+                return result.SentMessage;
+            else
+                return null;
+        }
+
+        public Message SendVideo(Chat chat, TelegramFile video, long duration = long.MinValue, long width = long.MinValue, long height = long.MinValue, TelegramFile thumb = null, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool supportsStreaming = false, bool disableNotification = false, Message replyToMessage = null)
+        {
+            if (chat == null || video == null)
+                throw new ArgumentNullException();
+
+            var parameters = new List<MultiPartParameter>()
+            {
+                new MultiPartStringParameter("chat_id", chat.Id.ToString()),
+                video.GetMultiPartParameter("video")
+            };
+
+            if (duration > long.MinValue)
+                parameters.Add(new MultiPartStringParameter("duration", duration.ToString()));
+
+            if (width > long.MinValue)
+                parameters.Add(new MultiPartStringParameter("width", duration.ToString()));
+
+            if (height > long.MinValue)
+                parameters.Add(new MultiPartStringParameter("height", duration.ToString()));
+
+            if (thumb != null)
+                parameters.Add(thumb.GetMultiPartParameter("thumb"));
+
+            if (caption != null)
+                parameters.Add(new MultiPartStringParameter("caption", caption));
+
+            if (markdownStyle != MarkdownStyles.None)
+                parameters.Add(new MultiPartStringParameter("parse_mode", Enum.GetName(typeof(MarkdownStyles), markdownStyle)));
+
+            if (supportsStreaming)
+                parameters.Add(new MultiPartStringParameter("supports_streaming", true.ToString()));
+
+            if (disableNotification)
+                parameters.Add(new MultiPartStringParameter("disable_notification", disableNotification.ToString()));
+
+            if (replyToMessage != null)
+                parameters.Add(new MultiPartStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
+
+            var result = _communicator.GetMultiPartReply<SendVideoReply>("sendVideo", parameters.ToArray());
 
             if (result.Ok)
                 return result.SentMessage;
