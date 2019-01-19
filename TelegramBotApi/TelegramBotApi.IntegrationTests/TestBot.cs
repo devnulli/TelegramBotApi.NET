@@ -32,7 +32,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
                 _testMessage = updates.First();
 
             }
-            catch(Exception)
+            catch(Exception e)
             {
                 throw new Exception($"You must first (A) set up a test bot for integration testing (B) make sure that there is a *.testtoken file containing the bots token in {documentsPath} (C) The bot should have at least one message in his backlog");
             }
@@ -151,6 +151,14 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             var m1 = _b.SendVideo(_testMessage.Chat, new TelegramFile(_testobjects.TestVideo, "light.mp4", "video/mp4"), thumb:new TelegramFile(_testobjects.TestThumb, "testthumb", "img/jpeg"));
             Assert.NotNull(m1);
             Assert.NotNull(m1.Video);
+        }
+
+        [Test]
+        public void SendAnimation_Returns()
+        {
+            var m1 = _b.SendAnimation(_testMessage.Chat, new TelegramFile(_testobjects.TestAnimation, "test.gif", "img/gif"));
+            Assert.NotNull(m1);
+            Assert.NotNull(m1.Animation);
         }
     }
 }

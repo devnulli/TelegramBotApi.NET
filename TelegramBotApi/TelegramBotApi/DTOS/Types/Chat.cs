@@ -7,7 +7,7 @@ namespace nerderies.TelegramBotApi.DTOS
         //complete API as of 2019-01-10
 
         [JsonProperty("id")]
-        public int Id;
+        public long Id;
 
         [JsonProperty("type")]
         public string Type;

@@ -15,5 +15,9 @@ namespace nerderies.TelegramBotApi.IntegrationTests
 
         [JsonProperty("testphoto")]
         public byte[] TestPhoto;
+
+        [JsonProperty("testanimation")]
+        public byte[] TestAnimation;
+
     }
 }
