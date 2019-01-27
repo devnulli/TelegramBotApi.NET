@@ -393,6 +393,10 @@ namespace nerderies.TelegramBotApi
                 return null;
         }
 
+        /// <summary>
+        /// sends a voice message to the chat
+        /// </summary>
+        /// <returns>on success, the sent mesage is returned</returns>
         public Message SendVoice(Chat chat, TelegramFile voice, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, long duration = long.MinValue, bool disableNotification = false, Message replyToMessage = null)
         {
             if (chat == null || voice == null)
@@ -420,6 +424,40 @@ namespace nerderies.TelegramBotApi
                 parameters.Add(new MultiPartStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
 
             var result = _communicator.GetMultiPartReply<SendVoiceReply>("sendVoice", parameters.ToArray());
+
+            if (result.Ok)
+                return result.SentMessage;
+            else
+                return null;
+        }
+
+        public Message SendVideoNote(Chat chat, TelegramFile videoNote, long duration = long.MinValue, long length = long.MinValue, TelegramFile thumb = null, bool disableNotification = false, Message replyToMessage = null)
+        {
+            if (chat == null || videoNote == null)
+                throw new ArgumentNullException();
+
+            var parameters = new List<MultiPartParameter>()
+            {
+                new MultiPartStringParameter("chat_id", chat.Id.ToString()),
+                videoNote.GetMultiPartParameter("video_note")
+            };
+
+            if (duration > long.MinValue)
+                parameters.Add(new MultiPartStringParameter("duration", duration.ToString()));
+
+            if (length > long.MinValue)
+                parameters.Add(new MultiPartStringParameter("length", length.ToString()));
+
+            if (thumb != null)
+                parameters.Add(thumb.GetMultiPartParameter("thumb"));
+
+            if (disableNotification)
+                parameters.Add(new MultiPartStringParameter("disable_notification", disableNotification.ToString()));
+
+            if (replyToMessage != null)
+                parameters.Add(new MultiPartStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
+
+            var result = _communicator.GetMultiPartReply<SendVideoNoteReply>("sendVideoNote", parameters.ToArray());
 
             if (result.Ok)
                 return result.SentMessage;

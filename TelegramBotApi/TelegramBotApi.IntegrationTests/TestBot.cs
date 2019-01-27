@@ -169,5 +169,16 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             Assert.NotNull(m1);
             Assert.NotNull(m1.Voice);
         }
+
+        [Test]
+        public void SendVideoNote_Returns()
+        {
+            //string lol = JsonConvert.SerializeObject(File.ReadAllBytes("D:\\file_example_OOG_1MG.ogg"));
+            var m1 = _b.SendVideoNote(_testMessage.Chat, new TelegramFile(_testobjects.TestVideo, "videoNote", "video/mp4"));
+            Assert.NotNull(m1);
+
+            //strangely, videoNote remains empty and the message is stored in the video property..
+            Assert.NotNull(m1.Video);
+        }
     }
 }
