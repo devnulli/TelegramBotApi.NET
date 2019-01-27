@@ -393,6 +393,40 @@ namespace nerderies.TelegramBotApi
                 return null;
         }
 
+        public Message SendVoice(Chat chat, TelegramFile voice, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, long duration = long.MinValue, bool disableNotification = false, Message replyToMessage = null)
+        {
+            if (chat == null || voice == null)
+                throw new ArgumentNullException();
+
+            var parameters = new List<MultiPartParameter>()
+            {
+                new MultiPartStringParameter("chat_id", chat.Id.ToString()),
+                voice.GetMultiPartParameter("voice")
+            };
+
+            if (caption != null)
+                parameters.Add(new MultiPartStringParameter("caption", caption));
+
+            if (markdownStyle != MarkdownStyles.None)
+                parameters.Add(new MultiPartStringParameter("parse_mode", Enum.GetName(typeof(MarkdownStyles), markdownStyle)));
+
+            if (duration > long.MinValue)
+                parameters.Add(new MultiPartStringParameter("duration", duration.ToString()));
+
+            if (disableNotification)
+                parameters.Add(new MultiPartStringParameter("disable_notification", disableNotification.ToString()));
+
+            if (replyToMessage != null)
+                parameters.Add(new MultiPartStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
+
+            var result = _communicator.GetMultiPartReply<SendVoiceReply>("sendVoice", parameters.ToArray());
+
+            if (result.Ok)
+                return result.SentMessage;
+            else
+                return null;
+        }
+
         /// <summary>
         /// The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients also clear your bot status)
         /// </summary>
