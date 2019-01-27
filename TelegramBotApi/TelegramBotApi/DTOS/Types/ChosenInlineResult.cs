@@ -4,6 +4,8 @@ namespace nerderies.TelegramBotApi.DTOS
 {
     public class ChosenInlineResult
     {
+        //complete API as of 2019-01-10
+
         [JsonProperty("result_id")]
         public string ResultId;
 

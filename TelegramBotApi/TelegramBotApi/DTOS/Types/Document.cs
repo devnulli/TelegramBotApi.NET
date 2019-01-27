@@ -5,6 +5,7 @@ namespace nerderies.TelegramBotApi.DTOS
     public class Document
     {
         //complete API as of 2019-01-11
+
         [JsonProperty("file_id")]
         public string FileId;
 

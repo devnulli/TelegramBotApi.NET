@@ -1,4 +1,3 @@
-using nerderies.TelegramBotApi;
 using nerderies.TelegramBotApi.DTOS;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -36,7 +35,6 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             {
                 throw new Exception($"You must first (A) set up a test bot for integration testing (B) make sure that there is a *.testtoken file containing the bots token in {documentsPath} (C) The bot should have at least one message in his backlog");
             }
-            
         }
 
         [Test]

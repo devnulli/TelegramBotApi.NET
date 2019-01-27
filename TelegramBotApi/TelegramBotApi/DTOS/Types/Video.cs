@@ -4,6 +4,8 @@ namespace nerderies.TelegramBotApi.DTOS
 {
     public class Video
     {
+        //complete API as of 2019-01-10
+
         [JsonProperty("file_id")]
         public string FileId;
 

@@ -4,6 +4,8 @@ namespace nerderies.TelegramBotApi.DTOS
 {
     public class PreCheckoutQuery
     {
+        //complete API as of 2019-01-10
+
         [JsonProperty("id")]
         public string Id;
 
