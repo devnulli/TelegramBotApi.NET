@@ -7,7 +7,7 @@ namespace nerderies.TelegramBotApi.DTOS
         //complete API as of 2019-01-11
 
         [JsonProperty("longitude")]
-        public double Longtitude;
+        public double Longitude;
 
         [JsonProperty("latitude")]
         public double Latitude;

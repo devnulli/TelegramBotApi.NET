@@ -2,6 +2,9 @@
 {
     public class ChatAction
     {
+        private ChatAction()
+        { }
+
         internal string Code { get; private set; }
 
         public static ChatAction Typing => new ChatAction()

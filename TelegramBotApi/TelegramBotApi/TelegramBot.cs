@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using nerderies.TelegramBotApi.Interfaces;
+using System.Globalization;
 
 namespace nerderies.TelegramBotApi
 {
@@ -458,6 +459,38 @@ namespace nerderies.TelegramBotApi
                 parameters.Add(new MultiPartStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
 
             var result = _communicator.GetMultiPartReply<SendVideoNoteReply>("sendVideoNote", parameters.ToArray());
+
+            if (result.Ok)
+                return result.SentMessage;
+            else
+                return null;
+        }
+
+        public Message SendLocation(Chat chat, Location location, long livePeriod = long.MinValue, bool disableNotification = false, Message replyToMessage = null)
+        {
+            if (chat == null || location == null)
+                throw new ArgumentNullException();
+
+            if (livePeriod != long.MinValue && (livePeriod < 60 || livePeriod > 86400))
+                throw new ArgumentException("Liveperiod should be between 60 and 86400");
+
+            var parameters = new List<QueryStringParameter>
+            {
+                new QueryStringParameter("chat_id", chat.Id.ToString()),
+                new QueryStringParameter("latitude", location.Latitude.ToString(CultureInfo.InvariantCulture)),
+                new QueryStringParameter("longitude", location.Longitude.ToString(CultureInfo.InvariantCulture))
+            };
+
+            if (livePeriod != long.MinValue)
+                parameters.Add(new QueryStringParameter("live_period", livePeriod.ToString()));
+
+            if (disableNotification)
+                parameters.Add(new QueryStringParameter("disable_notification", disableNotification.ToString()));
+
+            if (replyToMessage != null)
+                parameters.Add(new QueryStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
+
+            var result = _communicator.GetReply<SendVideoNoteReply>("sendLocation", parameters.ToArray());
 
             if (result.Ok)
                 return result.SentMessage;

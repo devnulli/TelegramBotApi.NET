@@ -178,5 +178,16 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             //strangely, videoNote remains empty and the message is stored in the video property..
             Assert.NotNull(m1.Video);
         }
+
+        [Test]
+        public void SendLocation_Returns()
+        {
+            //string lol = JsonConvert.SerializeObject(File.ReadAllBytes("D:\\file_example_OOG_1MG.ogg"));
+            var m1 = _b.SendLocation(_testMessage.Chat, new Location() { Latitude = 48.305859, Longitude = 14.286459 }, replyToMessage: _testMessage, livePeriod: 61);
+            Assert.NotNull(m1);
+
+            //strangely, videoNote remains empty and the message is stored in the video property..
+            Assert.NotNull(m1.Location);
+        }
     }
 }
