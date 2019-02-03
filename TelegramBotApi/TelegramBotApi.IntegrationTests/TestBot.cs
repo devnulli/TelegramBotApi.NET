@@ -4,6 +4,7 @@ using NUnit.Framework;
 using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 
 namespace nerderies.TelegramBotApi.IntegrationTests
 {
@@ -162,7 +163,6 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         [Test]
         public void SendVoice_Returns()
         {
-            //string lol = JsonConvert.SerializeObject(File.ReadAllBytes("D:\\file_example_OOG_1MG.ogg"));
             var m1 = _b.SendVoice(_testMessage.Chat, new TelegramFile(_testobjects.TestVoice, "test.ogg", "audio/ogg"));
             Assert.NotNull(m1);
             Assert.NotNull(m1.Voice);
@@ -171,7 +171,6 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         [Test]
         public void SendVideoNote_Returns()
         {
-            //string lol = JsonConvert.SerializeObject(File.ReadAllBytes("D:\\file_example_OOG_1MG.ogg"));
             var m1 = _b.SendVideoNote(_testMessage.Chat, new TelegramFile(_testobjects.TestVideo, "videoNote", "video/mp4"));
             Assert.NotNull(m1);
 
@@ -182,12 +181,26 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         [Test]
         public void SendLocation_Returns()
         {
-            //string lol = JsonConvert.SerializeObject(File.ReadAllBytes("D:\\file_example_OOG_1MG.ogg"));
-            var m1 = _b.SendLocation(_testMessage.Chat, new Location() { Latitude = 48.305859, Longitude = 14.286459 }, replyToMessage: _testMessage, livePeriod: 61);
+            var m1 = _b.SendLocation(_testMessage.Chat, new Location() { Latitude = 48.305859, Longitude = 14.286459 }, replyToMessage: _testMessage);
             Assert.NotNull(m1);
-
-            //strangely, videoNote remains empty and the message is stored in the video property..
             Assert.NotNull(m1.Location);
+        }
+
+        [Test]
+        public void LiveLocationTest()
+        {
+            var originalMessage = _b.SendLocation(_testMessage.Chat, new Location() { Latitude = 48.305859, Longitude = 14.286459 }, livePeriod: 60);
+            Assert.NotNull(originalMessage);
+
+            for (int i = 0; i < 5; i++)
+            {
+                System.Threading.Thread.Sleep(10000);
+                originalMessage = _b.EditMessageLiveLocation(originalMessage, new Location() { Latitude = originalMessage.Location.Latitude + 0.001, Longitude = originalMessage.Location.Longitude + 0.001 });
+                Assert.NotNull(originalMessage);
+            }
+
+            System.Threading.Thread.Sleep(20000);
+            Assert.Throws<WebException>(() => _b.EditMessageLiveLocation(originalMessage, new Location() { Latitude = originalMessage.Location.Latitude + 0.001, Longitude = originalMessage.Location.Longitude + 0.001 }));
         }
     }
 }

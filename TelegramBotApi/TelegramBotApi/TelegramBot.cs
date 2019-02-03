@@ -432,6 +432,11 @@ namespace nerderies.TelegramBotApi
                 return null;
         }
 
+
+        /// <summary>
+        /// sends a video note to the chat
+        /// </summary>
+        /// <returns>on success, the sent message is returned</returns>
         public Message SendVideoNote(Chat chat, TelegramFile videoNote, long duration = long.MinValue, long length = long.MinValue, TelegramFile thumb = null, bool disableNotification = false, Message replyToMessage = null)
         {
             if (chat == null || videoNote == null)
@@ -466,6 +471,10 @@ namespace nerderies.TelegramBotApi
                 return null;
         }
 
+        /// <summary>
+        /// sends a location to the chat
+        /// </summary>
+        /// <returns>on success, the sent location is returned</returns>
         public Message SendLocation(Chat chat, Location location, long livePeriod = long.MinValue, bool disableNotification = false, Message replyToMessage = null)
         {
             if (chat == null || location == null)
@@ -490,7 +499,35 @@ namespace nerderies.TelegramBotApi
             if (replyToMessage != null)
                 parameters.Add(new QueryStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
 
-            var result = _communicator.GetReply<SendVideoNoteReply>("sendLocation", parameters.ToArray());
+            var result = _communicator.GetReply<SendLocationReply>("sendLocation", parameters.ToArray());
+
+            if (result.Ok)
+                return result.SentMessage;
+            else
+                return null;
+        }
+
+        /// <summary>
+        /// edit live location messages sent by the bot or via the bot (for inline bots). A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation
+        /// </summary>
+        /// <returns>true if successful, also sets the sentMessage out parameter when the edited message was sent by the bot</returns>
+        /// 
+
+        //the api has different return values for inline messages, so when needed, make a different method i.e. EditInlineMessageLiveLocation
+        public Message EditMessageLiveLocation(Message messageToUpdate, Location newLocation)
+        {
+            if (messageToUpdate == null || newLocation == null)
+                throw new ArgumentNullException();
+
+            var parameters = new List<QueryStringParameter>
+            {
+                new QueryStringParameter("chat_id", messageToUpdate.Chat.Id.ToString()),
+                new QueryStringParameter("message_id", messageToUpdate.MessageId.ToString()),
+                new QueryStringParameter("latitude", newLocation.Latitude.ToString(CultureInfo.InvariantCulture)),
+                new QueryStringParameter("longitude", newLocation.Longitude.ToString(CultureInfo.InvariantCulture))
+            };
+
+            var result = _communicator.GetReply<EditMessageLiveLocationReply>("editMessageLiveLocation", parameters.ToArray());
 
             if (result.Ok)
                 return result.SentMessage;

@@ -8,7 +8,7 @@
     <Authors>devnulli</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>nerderies.TelegramBotApi</PackageId>
-    <Description>this is an implementation of the Telegram Bot API
+    <Description>this is a .NET Standard 2.0  implementation of the Telegram Bot API
 </Description>
     <Copyright>Michael Schönbauer</Copyright>
     <RepositoryUrl>https://github.com/devnulli/TelegramBotApi.NET</RepositoryUrl>
