@@ -1,6 +1,6 @@
 # TelegramBotApi.NET
 
-This is a .NET Wrapper for the Telegram Bot API
+This is an implementation for the Telegram Bot API, for .NET Standard 2.0
 
 It is designed for simple use, so that beginners can use Telegram Bots for fun, house automation, whatever.
 Although its for simple use, the target is to keep track and implement all of Telegrams API in this one dll.
