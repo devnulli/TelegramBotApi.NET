@@ -201,6 +201,12 @@ namespace nerderies.TelegramBotApi.IntegrationTests
 
             System.Threading.Thread.Sleep(20000);
             Assert.Throws<WebException>(() => _b.EditMessageLiveLocation(originalMessage, new Location() { Latitude = originalMessage.Location.Latitude + 0.001, Longitude = originalMessage.Location.Longitude + 0.001 }));
+
+            var abortLiveLocation = _b.SendLocation(_testMessage.Chat, new Location() { Latitude = 48.305859, Longitude = 14.286459 }, livePeriod: 60);
+            Assert.NotNull(abortLiveLocation);
+            abortLiveLocation = _b.StopMessageLiveLocation(abortLiveLocation);
+            Assert.NotNull(abortLiveLocation);
+            Assert.Throws<WebException>(() => _b.EditMessageLiveLocation(abortLiveLocation, new Location() { Latitude = originalMessage.Location.Latitude + 0.001, Longitude = originalMessage.Location.Longitude + 0.001 }));
         }
     }
 }

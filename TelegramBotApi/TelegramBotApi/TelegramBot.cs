@@ -535,6 +535,25 @@ namespace nerderies.TelegramBotApi
                 return null;
         }
 
+        public Message StopMessageLiveLocation(Message messageToUpdate)
+        {
+            if (messageToUpdate == null)
+                throw new ArgumentNullException();
+
+            var parameters = new List<QueryStringParameter>
+            {
+                new QueryStringParameter("chat_id", messageToUpdate.Chat.Id.ToString()),
+                new QueryStringParameter("message_id", messageToUpdate.MessageId.ToString()),
+            };
+
+            var result = _communicator.GetReply<StopMessageLiveLocationReply>("stopMessageLiveLocation", parameters.ToArray());
+
+            if (result.Ok)
+                return result.SentMessage;
+            else
+                return null;
+        }
+
         /// <summary>
         /// The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients also clear your bot status)
         /// </summary>
