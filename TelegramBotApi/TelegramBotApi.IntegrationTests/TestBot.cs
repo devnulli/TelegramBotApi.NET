@@ -34,7 +34,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             }
             catch
             {
-                throw new Exception($"You must first (A) set up a test bot for integration testing (B) make sure that there is a *.testtoken file containing the bots token in {documentsPath} (C) The bot should have at least one message in his backlog");
+                throw new Exception($"You must first (A) set up a test bot for integration testing (B) make sure that there is a *.testtoken file containing the bots token in {documentsPath} (C) The bot must have at least one message in his backlog");
             }
         }
 
@@ -187,7 +187,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         }
 
         [Test]
-        public void LiveLocationTest()
+        public void LiveLocation_Returns_HasWorkingTimer()
         {
             var originalMessage = _b.SendLocation(_testMessage.Chat, new Location() { Latitude = 48.305859, Longitude = 14.286459 }, livePeriod: 60);
             Assert.NotNull(originalMessage);
@@ -207,6 +207,37 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             abortLiveLocation = _b.StopMessageLiveLocation(abortLiveLocation);
             Assert.NotNull(abortLiveLocation);
             Assert.Throws<WebException>(() => _b.EditMessageLiveLocation(abortLiveLocation, new Location() { Latitude = originalMessage.Location.Latitude + 0.001, Longitude = originalMessage.Location.Longitude + 0.001 }));
+        }
+
+        [Test]
+        public void SendVenue_Returns()
+        {
+            var title = "Steel City";
+            var address = "Hauptplatz, Linz, Austria";
+            var m1 = _b.SendVenue(_testMessage.Chat, new Location() { Latitude = 48.305859, Longitude = 14.286459 }, title: title, address: address);
+            Assert.NotNull(m1);
+            Assert.NotNull(m1.Venue);
+            Assert.NotNull(m1.Venue.Title);
+            Assert.NotNull(m1.Venue.Address);
+            Assert.That(m1.Venue.Title == title);
+            Assert.That(m1.Venue.Address==address);
+            Assert.That(string.IsNullOrEmpty(m1.Venue.FoursquareType));
+
+            title = "Amici";
+            address = "Verlängerte Kirchengasse, 4040 Linz, Österreich";
+            var foursquareId = "4b6076b0f964a52082e729e3";
+            var foursquareType = "4bf58dd8d48988d1ca941735"; //pizzeria
+            m1 = _b.SendVenue(_testMessage.Chat, new Location() { Latitude = 48.312400, Longitude = 14.287152 }, title: title, address: address, foursquareId: foursquareId, foursquareType: foursquareType);
+            Assert.NotNull(m1);
+            Assert.NotNull(m1.Venue);
+            Assert.NotNull(m1.Venue.Title);
+            Assert.NotNull(m1.Venue.Address);
+            Assert.NotNull(m1.Venue.FoursquareId);
+            Assert.NotNull(m1.Venue.FoursquareType);
+            Assert.That(m1.Venue.Title == title);
+            Assert.That(m1.Venue.Address == address);
+            Assert.That(m1.Venue.FoursquareId == foursquareId);
+            Assert.That(m1.Venue.FoursquareType == foursquareType);
         }
     }
 }

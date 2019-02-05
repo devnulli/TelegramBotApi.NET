@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>nerderies.TelegramBotApi</RootNamespace>
     <AssemblyName>TelegramBotApi</AssemblyName>
-    <Version>0.5.1.2</Version>
+    <Version>0.5.1.3</Version>
     <Authors>devnulli</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>nerderies.TelegramBotApi</PackageId>
@@ -16,7 +16,8 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
-    <PackageReleaseNotes>-implemented StopLiveLocation method</PackageReleaseNotes>
+    <PackageReleaseNotes>-implemented sendVenue method
+</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

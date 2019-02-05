@@ -184,7 +184,7 @@ namespace nerderies.TelegramBotApi
                 photo.GetMultiPartParameter("photo")
             };
 
-            if(caption!=null)
+            if(!string.IsNullOrEmpty(caption))
             {
                 parameters.Add(new MultiPartStringParameter("caption", caption));
             }
@@ -277,7 +277,7 @@ namespace nerderies.TelegramBotApi
             if (thumb != null)
                 parameters.Add(thumb.GetMultiPartParameter("thumb"));
 
-            if (caption != null)
+            if (!string.IsNullOrEmpty(caption))
                 parameters.Add(new MultiPartStringParameter("caption", caption));
 
             if (markdownStyle != MarkdownStyles.None)
@@ -324,7 +324,7 @@ namespace nerderies.TelegramBotApi
             if (thumb != null)
                 parameters.Add(thumb.GetMultiPartParameter("thumb"));
 
-            if (caption != null)
+            if (!string.IsNullOrEmpty(caption))
                 parameters.Add(new MultiPartStringParameter("caption", caption));
 
             if (markdownStyle != MarkdownStyles.None)
@@ -409,7 +409,7 @@ namespace nerderies.TelegramBotApi
                 voice.GetMultiPartParameter("voice")
             };
 
-            if (caption != null)
+            if (!string.IsNullOrEmpty(caption))
                 parameters.Add(new MultiPartStringParameter("caption", caption));
 
             if (markdownStyle != MarkdownStyles.None)
@@ -547,6 +547,44 @@ namespace nerderies.TelegramBotApi
             };
 
             var result = _communicator.GetReply<StopMessageLiveLocationReply>("stopMessageLiveLocation", parameters.ToArray());
+
+            if (result.Ok)
+                return result.SentMessage;
+            else
+                return null;
+        }
+
+        public Message SendVenue(Chat chat, Location location, string title = null, string address = null, string foursquareId = null, string foursquareType = null, bool disableNotification = false, Message replyToMessage = null)
+        {
+            if (chat == null || location == null)
+                throw new ArgumentNullException();
+
+            var parameters = new List<QueryStringParameter>
+            {
+                new QueryStringParameter("chat_id", chat.Id.ToString()),
+                new QueryStringParameter("latitude", location.Latitude.ToString(CultureInfo.InvariantCulture)),
+                new QueryStringParameter("longitude", location.Longitude.ToString(CultureInfo.InvariantCulture))
+            };
+
+            if(!string.IsNullOrEmpty(title))
+                parameters.Add(new QueryStringParameter("title", title));
+
+            if (!string.IsNullOrEmpty(address))
+                parameters.Add(new QueryStringParameter("address", address));
+
+            if (!string.IsNullOrEmpty(foursquareId))
+                parameters.Add(new QueryStringParameter("foursquare_id", foursquareId));
+
+            if (!string.IsNullOrEmpty(foursquareType))
+                parameters.Add(new QueryStringParameter("foursquare_type", foursquareType));
+
+            if (disableNotification)
+                parameters.Add(new QueryStringParameter("disable_notification", disableNotification.ToString()));
+
+            if (replyToMessage != null)
+                parameters.Add(new QueryStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
+
+            var result = _communicator.GetReply<SendVenueReply>("sendVenue", parameters.ToArray());
 
             if (result.Ok)
                 return result.SentMessage;
