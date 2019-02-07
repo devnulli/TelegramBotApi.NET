@@ -103,6 +103,7 @@ namespace nerderies.TelegramBotApi
         {
             if (chat == null || text == null)
                 throw new ArgumentNullException();
+
             if (string.IsNullOrEmpty(text))
                 throw new ArgumentException("text cannot be empty");
 
@@ -227,7 +228,7 @@ namespace nerderies.TelegramBotApi
                 audio.GetMultiPartParameter("audio")
             };
 
-            if (caption != null)
+            if (!string.IsNullOrEmpty(caption))
                 parameters.Add(new MultiPartStringParameter("caption", caption));
 
             if (markdownStyle != MarkdownStyles.None)
@@ -374,7 +375,7 @@ namespace nerderies.TelegramBotApi
             if (thumb != null)
                 parameters.Add(thumb.GetMultiPartParameter("thumb"));
 
-            if (caption != null)
+            if (!string.IsNullOrEmpty(caption))
                 parameters.Add(new MultiPartStringParameter("caption", caption));
 
             if (markdownStyle != MarkdownStyles.None)
@@ -512,7 +513,6 @@ namespace nerderies.TelegramBotApi
         /// </summary>
         /// <returns>true if successful, also sets the sentMessage out parameter when the edited message was sent by the bot</returns>
         /// 
-
         //the api has different return values for inline messages, so when needed, make a different method i.e. EditInlineMessageLiveLocation
         public Message EditMessageLiveLocation(Message messageToUpdate, Location newLocation)
         {
@@ -585,6 +585,41 @@ namespace nerderies.TelegramBotApi
                 parameters.Add(new QueryStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
 
             var result = _communicator.GetReply<SendVenueReply>("sendVenue", parameters.ToArray());
+
+            if (result.Ok)
+                return result.SentMessage;
+            else
+                return null;
+        }
+
+        public Message SendContact(Chat chat, string phoneNumber, string firstName, string lastName = null, string vcard = null, bool disableNotification = false, Message replyToMessage = null)
+        {
+            if (chat == null || phoneNumber == null || firstName == null)
+                throw new ArgumentNullException();
+
+            if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(firstName))
+                throw new ArgumentException();
+
+            var parameters = new List<QueryStringParameter>
+            {
+                new QueryStringParameter("chat_id", chat.Id.ToString()),
+                new QueryStringParameter("phone_number", phoneNumber),
+                new QueryStringParameter("first_name", firstName)
+            };
+
+            if (!string.IsNullOrEmpty(lastName))
+                parameters.Add(new QueryStringParameter("last_name", lastName));
+
+            if (!string.IsNullOrEmpty(vcard))
+                parameters.Add(new QueryStringParameter("vcard", vcard));
+
+            if (disableNotification)
+                parameters.Add(new QueryStringParameter("disable_notification", disableNotification.ToString()));
+
+            if (replyToMessage != null)
+                parameters.Add(new QueryStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
+
+            var result = _communicator.GetReply<SendContactReply>("sendContact", parameters.ToArray());
 
             if (result.Ok)
                 return result.SentMessage;

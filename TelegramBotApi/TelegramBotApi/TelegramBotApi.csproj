@@ -16,7 +16,8 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
-    <PackageReleaseNotes>-implemented sendVenue method
+    <PackageReleaseNotes>+ implemented sendVenue method
++ implemented sendContact method
 </PackageReleaseNotes>
   </PropertyGroup>
 

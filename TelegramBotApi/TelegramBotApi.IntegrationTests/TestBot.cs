@@ -239,5 +239,21 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             Assert.That(m1.Venue.FoursquareId == foursquareId);
             Assert.That(m1.Venue.FoursquareType == foursquareType);
         }
+
+        [Test]
+        public void SendContact_Returns()
+        {
+            var m1 = _b.SendContact(_testMessage.Chat, "+43 677 626 91526", "Mike");
+            Assert.NotNull(m1);
+            Assert.NotNull(m1.Contact);
+            Assert.NotNull(m1.Contact.PhoneNumber);
+            Assert.NotNull(m1.Contact.FirstName);
+
+            m1 = _b.SendContact(_testMessage.Chat, "+43 677 62691526", "Mike", lastName: "Schönbauer", replyToMessage: _testMessage);
+            Assert.NotNull(m1);
+            Assert.NotNull(m1.Contact);
+            Assert.NotNull(m1.Contact.LastName);
+            Assert.NotNull(m1.ReplyToMessage);
+        }
     }
 }
