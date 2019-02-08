@@ -433,7 +433,6 @@ namespace nerderies.TelegramBotApi
                 return null;
         }
 
-
         /// <summary>
         /// sends a video note to the chat
         /// </summary>
@@ -535,6 +534,7 @@ namespace nerderies.TelegramBotApi
                 return null;
         }
 
+        //the api has different return values for inline messages, so when needed, make a different method i.e. StopInlineMessageLiveLocation
         public Message StopMessageLiveLocation(Message messageToUpdate)
         {
             if (messageToUpdate == null)
@@ -625,6 +625,47 @@ namespace nerderies.TelegramBotApi
                 return result.SentMessage;
             else
                 return null;
+        }
+
+        public IList<PhotoSize[]> GetUserProfilePhotos(User user, int maxPhotos = int.MaxValue)
+        {
+            if (user == null)
+                throw new ArgumentNullException();
+
+            var parameters = new List<QueryStringParameter>
+            {
+                new QueryStringParameter("user_id", user.Id.ToString()),
+            };
+
+            long offset = 0;
+            long stepsize = 100;
+            var offsetParameter = new QueryStringParameter("offset", offset.ToString());
+            var stepSizeParameter = new QueryStringParameter("limit", maxPhotos < stepsize ? maxPhotos.ToString() : stepsize.ToString());
+            
+
+            parameters.Add(offsetParameter);
+            parameters.Add(stepSizeParameter);
+
+            long totalCount;
+            var photos = new List<PhotoSize[]>();
+
+            do
+            {
+                var result = _communicator.GetReply<GetUserProfilePhotosReply>("getUserProfilePhotos", parameters.ToArray());
+                if (!result.Ok)
+                    return null;
+
+                totalCount = result.UserProfilePhotos.TotalCount;
+                photos.AddRange(result.UserProfilePhotos.Photos);
+
+                offset += stepsize;
+                offsetParameter.Value = offset.ToString();
+                if (totalCount - offset < stepsize)
+                    stepSizeParameter.Value = (totalCount - offset).ToString();
+            }
+            while ((offset <= totalCount) && (offset <= maxPhotos));
+
+            return photos;
         }
 
         /// <summary>

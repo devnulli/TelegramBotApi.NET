@@ -202,6 +202,8 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             System.Threading.Thread.Sleep(20000);
             Assert.Throws<WebException>(() => _b.EditMessageLiveLocation(originalMessage, new Location() { Latitude = originalMessage.Location.Latitude + 0.001, Longitude = originalMessage.Location.Longitude + 0.001 }));
 
+            System.Threading.Thread.Sleep(5000);
+
             var abortLiveLocation = _b.SendLocation(_testMessage.Chat, new Location() { Latitude = 48.305859, Longitude = 14.286459 }, livePeriod: 60);
             Assert.NotNull(abortLiveLocation);
             abortLiveLocation = _b.StopMessageLiveLocation(abortLiveLocation);
@@ -254,6 +256,33 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             Assert.NotNull(m1.Contact);
             Assert.NotNull(m1.Contact.LastName);
             Assert.NotNull(m1.ReplyToMessage);
+        }
+
+        [Test]
+        public void GetUserProfilePhotos_Returns()
+        {
+            User testUser = new User() { Id = 20793245 };
+            var m1 = _b.GetUserProfilePhotos(testUser);
+            Assert.NotNull(m1);
+
+            var count = m1.Count;
+
+            //when the test user has more than 3 pics, we can additionally test the limit parameter
+            if (m1.Count > 3)
+            {
+                var m2 = _b.GetUserProfilePhotos(testUser, 3);
+                Assert.NotNull(m2);
+                Assert.That(m2.Count == 3);
+            }
+
+            int cnt = 0;
+            foreach(var x in m1)
+            {
+                _b.SendPhoto(_testMessage.Chat, new TelegramFile(x[0].FileId), caption: $"Photo {cnt}:{x[0].FileId}");
+                cnt++;
+                if (cnt > 4)
+                    break;
+            }
         }
     }
 }
