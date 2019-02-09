@@ -284,5 +284,16 @@ namespace nerderies.TelegramBotApi.IntegrationTests
                     break;
             }
         }
+
+        [Test]
+        public void GetFile_Returns()
+        {
+            User testUser = new User() { Id = 20793245 };
+            var m1 = _b.GetUserProfilePhotos(testUser);
+            if(m1.Count > 0)
+            {
+                var result = _b.GetFile(m1[0][0].FileId);
+            }
+        }
     }
 }

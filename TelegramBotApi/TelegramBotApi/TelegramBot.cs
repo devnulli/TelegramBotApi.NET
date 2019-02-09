@@ -627,6 +627,28 @@ namespace nerderies.TelegramBotApi
                 return null;
         }
 
+        /// <summary>
+        /// The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients also clear your bot status)
+        /// </summary>
+        /// <returns>True if successful</returns>
+        public bool SendChatAction(Chat chat, ChatAction chatAction)
+        {
+            var parameters = new List<QueryStringParameter>()
+            {
+                new QueryStringParameter("chat_id", chat.Id.ToString()),
+                new QueryStringParameter("action", chatAction.Code)
+            };
+
+            var reply = _communicator.GetReply<SendChatActionReply>("sendChatAction", parameters.ToArray());
+            if (reply.Ok)
+            {
+                return reply.Result;
+            }
+            else
+                return false;
+
+        }
+
         public IList<PhotoSize[]> GetUserProfilePhotos(User user, int maxPhotos = int.MaxValue)
         {
             if (user == null)
@@ -668,26 +690,17 @@ namespace nerderies.TelegramBotApi
             return photos;
         }
 
-        /// <summary>
-        /// The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients also clear your bot status)
-        /// </summary>
-        /// <returns>True if successful</returns>
-        public bool SendChatAction(Chat chat, ChatAction chatAction)
+        public FileDescriptor GetFile(string fileId)
         {
-            var parameters = new List<QueryStringParameter>()
-            {
-                new QueryStringParameter("chat_id", chat.Id.ToString()),
-                new QueryStringParameter("action", chatAction.Code)
-            };
+            if (fileId == null)
+                throw new ArgumentNullException();
 
-            var reply = _communicator.GetReply<SendChatActionReply>("sendChatAction", parameters.ToArray());
-            if (reply.Ok)
-            {
-                return reply.Result;
-            }
-            else
-                return false;
-            
+            var id = new QueryStringParameter("file_id", fileId);
+            var result = _communicator.GetReply<GetFileReply>("getFile", id);
+
+            if (result.Ok)
+                return result.File;
+            else return null;
         }
         #endregion
     }
