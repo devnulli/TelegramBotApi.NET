@@ -199,15 +199,14 @@ namespace nerderies.TelegramBotApi.IntegrationTests
                 Assert.NotNull(originalMessage);
             }
 
-            System.Threading.Thread.Sleep(20000);
+            System.Threading.Thread.Sleep(30000);
             Assert.Throws<WebException>(() => _b.EditMessageLiveLocation(originalMessage, new Location() { Latitude = originalMessage.Location.Latitude + 0.001, Longitude = originalMessage.Location.Longitude + 0.001 }));
-
-            System.Threading.Thread.Sleep(5000);
 
             var abortLiveLocation = _b.SendLocation(_testMessage.Chat, new Location() { Latitude = 48.305859, Longitude = 14.286459 }, livePeriod: 60);
             Assert.NotNull(abortLiveLocation);
             abortLiveLocation = _b.StopMessageLiveLocation(abortLiveLocation);
             Assert.NotNull(abortLiveLocation);
+            System.Threading.Thread.Sleep(1000);
             Assert.Throws<WebException>(() => _b.EditMessageLiveLocation(abortLiveLocation, new Location() { Latitude = originalMessage.Location.Latitude + 0.001, Longitude = originalMessage.Location.Longitude + 0.001 }));
         }
 
@@ -293,6 +292,10 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             if(m1.Count > 0)
             {
                 var result = _b.GetFile(m1[0][0].FileId);
+                Assert.NotNull(result);
+                Assert.NotNull(result.FileId);
+                Assert.NotNull(result.FilePath);
+                Assert.NotNull(result.FileSize);
             }
         }
     }
