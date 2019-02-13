@@ -349,6 +349,15 @@ namespace nerderies.TelegramBotApi
         }
 
         /// <summary>
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public byte[] GetFileContent(FileDescriptor result)
+        {
+            return _communicator.GetFileContent(result.FilePath);
+        }
+
+        /// <summary>
         /// sends a video to the chat
         /// </summary>
         /// <returns>on success, the sent message is returned</returns>
@@ -702,6 +711,7 @@ namespace nerderies.TelegramBotApi
                 return result.File;
             else return null;
         }
+
         #endregion
     }
 }

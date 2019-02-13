@@ -62,6 +62,15 @@ namespace nerderies.TelegramBotApi
             return url;
         }
 
+        private string BuildFileUrl(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentException("empty filename");
+
+            string url = Constants.FileUrl.Replace("%%token%%", _authenticationToken).Replace("%%filepath%%", fileName);
+            return url;
+        }
+
         private string GetRateLimitedMultipartReply(string url, MultiPartParameter[] parameters)
         {
             lock (this)
@@ -88,6 +97,16 @@ namespace nerderies.TelegramBotApi
                 RateLimit();
 
                 return _webClient.DownloadString(url);
+            }
+        }
+
+        private byte[] GetRateLimitedBytes(string url)
+        {
+            lock(this)
+            {
+                RateLimit();
+
+                return _webClient.DownloadData(url);
             }
         }
 
@@ -124,6 +143,13 @@ namespace nerderies.TelegramBotApi
 
             return result;
         }
+
+        public byte[] GetFileContent(string filePath)
+        {
+            var url = BuildFileUrl(filePath);
+            return GetRateLimitedBytes(url);
+        }
+
         #endregion
     }
 }

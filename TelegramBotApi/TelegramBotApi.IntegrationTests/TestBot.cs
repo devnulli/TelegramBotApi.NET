@@ -285,7 +285,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         }
 
         [Test]
-        public void GetFile_Returns()
+        public void GetFile_Returns_GetFileBytes_Returns()
         {
             User testUser = new User() { Id = 20793245 };
             var m1 = _b.GetUserProfilePhotos(testUser);
@@ -296,6 +296,12 @@ namespace nerderies.TelegramBotApi.IntegrationTests
                 Assert.NotNull(result.FileId);
                 Assert.NotNull(result.FilePath);
                 Assert.NotNull(result.FileSize);
+                var bytes = _b.GetFileContent(result);
+                Assert.NotNull(bytes);
+                Assert.That(bytes.Length > 0);
+                var m2 = _b.SendDocument(_testMessage.Chat, new TelegramFile(bytes, "fileTransferTest", "img/jpeg"));
+                Assert.NotNull(m2);
+                Assert.NotNull(m2.Document);
             }
         }
     }
