@@ -54,15 +54,15 @@ namespace nerderies.TelegramBotApi
         #region public operations
 
         /// <summary>
-        /// Gets all unconfirmed messages the bot has received
-        /// - when called the first time, it get all unconfirmed messages the bot has received
-        /// - subsequent calls confirm previous messages, so after that, it will only get new messages (and confirm old ones) 
+        /// Gets all unconfirmed updates the bot has received
+        /// - when called the first time, it gets all unconfirmed messages the bot has received
+        /// - subsequent calls confirm previous update, so after that, it will only get new updates (and confirm old ones) 
         /// 
         /// </summary>
-        /// <param name="peek">when set, the bot will not confirm updates, so that the messages will also be kept on the server</param>
+        /// <param name="peek">when set, the bot will not confirm updates, so that they will also be kept on the server</param>
         /// <returns>a list of Messages</returns>
         /// 
-        public IList<Message> GetUpdates(bool peek = false)
+        public IList<Update> GetUpdates(bool peek = false)
         {
             QueryStringParameter requestlimit = new QueryStringParameter("limit", Constants.RequestLimit.ToString());
 
@@ -82,7 +82,7 @@ namespace nerderies.TelegramBotApi
            if (reply.Updates.Length > 0)
                 _updateOffset = reply.Updates[reply.Updates.Length - 1].UpdateId + 1;
 
-            return new List<Message>(from u in reply.Updates select u.Message);
+            return new List<Update>(reply.Updates);
         }
 
         /// <summary>

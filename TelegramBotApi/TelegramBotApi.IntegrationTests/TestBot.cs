@@ -12,6 +12,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
     {
         private TelegramBot _b = null;
         private Message _testMessage = null;
+        private Message _channelPost = null;
         private TestObjects _testobjects = null;
 
         [SetUp]
@@ -28,13 +29,13 @@ namespace nerderies.TelegramBotApi.IntegrationTests
                 var fileInfo = documentsPath.GetFiles("*.testtoken").First();
                 token = File.ReadAllText(fileInfo.FullName).Trim();
                 _b = TelegramBot.GetBot(token, true);
-                var updates = _b.GetUpdates();
-                _testMessage = updates.First();
-
+                var updates = _b.GetUpdates(true);
+                _testMessage = (from u in updates where u.Message != null select u.Message).First();
+                _channelPost = (from u in updates where u.ChannelPost != null select u.ChannelPost).First();
             }
             catch
             {
-                throw new Exception($"You must first (A) set up a test bot for integration testing (B) make sure that there is a *.testtoken file containing the bots token in {documentsPath} (C) The bot must have at least one message in his backlog");
+                throw new Exception($"You must first (A) set up a test bot for integration testing (B) make sure that there is a *.testtoken file containing the bots token in {documentsPath} (C) The bot must have at least one message (D) The bot must have at least one channelupdate");
             }
         }
 
@@ -206,7 +207,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             Assert.NotNull(abortLiveLocation);
             abortLiveLocation = _b.StopMessageLiveLocation(abortLiveLocation);
             Assert.NotNull(abortLiveLocation);
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(2000);
             Assert.Throws<WebException>(() => _b.EditMessageLiveLocation(abortLiveLocation, new Location() { Latitude = originalMessage.Location.Latitude + 0.001, Longitude = originalMessage.Location.Longitude + 0.001 }));
         }
 
