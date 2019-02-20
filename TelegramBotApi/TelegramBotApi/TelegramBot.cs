@@ -348,6 +348,18 @@ namespace nerderies.TelegramBotApi
                 return null;
         }
 
+        public string ExportChatInviteLink(Chat chat)
+        {
+            if (chat == null)
+                throw new ArgumentNullException();
+
+            var result = _communicator.GetReply<ExportChatInviteLinkReply>("exportChatInviteLink", new QueryStringParameter("chat_id", chat.Id.ToString()));
+            if (result.Ok)
+                return result.ChatInviteLink;
+            else
+                return null;
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="result"></param>

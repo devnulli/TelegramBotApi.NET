@@ -12,7 +12,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
     {
         private TelegramBot _b = null;
         private Message _testMessage = null;
-        private Message _channelPost = null;
+        private Message _testChannelPost = null;
         private TestObjects _testobjects = null;
 
         [SetUp]
@@ -31,7 +31,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
                 _b = TelegramBot.GetBot(token, true);
                 var updates = _b.GetUpdates(true);
                 _testMessage = (from u in updates where u.Message != null select u.Message).First();
-                _channelPost = (from u in updates where u.ChannelPost != null select u.ChannelPost).First();
+                _testChannelPost = (from u in updates where u.ChannelPost != null select u.ChannelPost).First();
             }
             catch
             {
@@ -304,6 +304,20 @@ namespace nerderies.TelegramBotApi.IntegrationTests
                 Assert.NotNull(m2);
                 Assert.NotNull(m2.Document);
             }
+        }
+
+        [Test]
+        public void ExportChatInviteLink_Returns()
+        {
+            var linkOne = _b.ExportChatInviteLink(_testChannelPost.Chat);
+            Assert.NotNull(linkOne);
+
+            var linkTwo = _b.ExportChatInviteLink(_testChannelPost.Chat);
+            Assert.NotNull(linkTwo);
+            Assert.That(linkOne != linkTwo);
+
+            Assert.Throws<WebException>(() => _b.ExportChatInviteLink(_testMessage.Chat));
+            
         }
     }
 }
