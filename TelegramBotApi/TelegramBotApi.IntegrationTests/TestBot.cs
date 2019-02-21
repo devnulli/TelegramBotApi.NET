@@ -190,27 +190,6 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         [Test]
         public void LiveLocation_Returns_HasWorkingTimer()
         {
-            //let's create a bot object
-            var myBot = TelegramBot.GetBot("<mytoken");
-
-            while (true)
-            {
-                //lets get all updates for this bot
-                var myUpdates = myBot.GetUpdates();
-
-                foreach (var update in myUpdates)
-                {
-                    if (update.Message != null)
-                    {
-                        //we have received a message
-                        var message = update.Message;
-
-                        //lets answer
-                        myBot.SendMessage(update.Message.Chat, $"Thanks for your message, {message.From.FirstName}");
-                    }
-                }
-            }
-
             var originalMessage = _b.SendLocation(_testMessage.Chat, new Location() { Latitude = 48.305859, Longitude = 14.286459 }, livePeriod: 60);
             Assert.NotNull(originalMessage);
 
