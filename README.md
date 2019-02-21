@@ -20,6 +20,4 @@ Although the library intends to cover all of Telegrams Bot API, and complex usec
 
 ## Tutorial
 The tutorial takes you from creating a simple bot to the more complex cases:
-
-- [create a Telegram Bot and get a token](todo)
-- [program your bot](todo)
+--> TODO and coming soon
