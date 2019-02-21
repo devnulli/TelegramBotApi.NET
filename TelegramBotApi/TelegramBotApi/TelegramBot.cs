@@ -174,7 +174,7 @@ namespace nerderies.TelegramBotApi
         /// sends a photo to the chat
         /// </summary>
         /// <returns>on success, the sent Message is returned </returns>
-        public Message SendPhoto(Chat chat, TelegramFile photo, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool disableNotification = false, Message replyToMessage = null)
+        public Message SendPhoto(Chat chat, InputFile photo, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool disableNotification = false, Message replyToMessage = null)
         {
             if (chat == null || photo == null)
                 throw new ArgumentNullException();
@@ -217,7 +217,7 @@ namespace nerderies.TelegramBotApi
         /// sends an audio file to the chat
         /// </summary>
         /// <returns>on success, the sent Message is returned</returns>
-        public Message SendAudio(Chat chat, TelegramFile audio, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, long duration = long.MinValue, string performer = null, string title = null, TelegramFile thumb = null, bool disableNotification = false, Message replyToMessage = null)
+        public Message SendAudio(Chat chat, InputFile audio, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, long duration = long.MinValue, string performer = null, string title = null, InputFile thumb = null, bool disableNotification = false, Message replyToMessage = null)
         {
             if (chat == null || audio == null)
                 throw new ArgumentNullException();
@@ -264,7 +264,7 @@ namespace nerderies.TelegramBotApi
         /// sends a document to the chat
         /// </summary>
         /// <returns>on success, the sent message is returned</returns>
-        public Message SendDocument(Chat chat, TelegramFile document, TelegramFile thumb = null, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool disableNotification = false, Message replyToMessage = null )
+        public Message SendDocument(Chat chat, InputFile document, InputFile thumb = null, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool disableNotification = false, Message replyToMessage = null )
         {
             if (chat == null || document == null)
                 throw new ArgumentNullException();
@@ -302,7 +302,7 @@ namespace nerderies.TelegramBotApi
         /// sends a video to the chat
         /// </summary>
         /// <returns>on success, the sent message is returned</returns>
-        public Message SendVideo(Chat chat, TelegramFile video, long duration = long.MinValue, long width = long.MinValue, long height = long.MinValue, TelegramFile thumb = null, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool supportsStreaming = false, bool disableNotification = false, Message replyToMessage = null)
+        public Message SendVideo(Chat chat, InputFile video, long duration = long.MinValue, long width = long.MinValue, long height = long.MinValue, InputFile thumb = null, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool supportsStreaming = false, bool disableNotification = false, Message replyToMessage = null)
         {
             if (chat == null || video == null)
                 throw new ArgumentNullException();
@@ -348,32 +348,11 @@ namespace nerderies.TelegramBotApi
                 return null;
         }
 
-        public string ExportChatInviteLink(Chat chat)
-        {
-            if (chat == null)
-                throw new ArgumentNullException();
-
-            var result = _communicator.GetReply<ExportChatInviteLinkReply>("exportChatInviteLink", new QueryStringParameter("chat_id", chat.Id.ToString()));
-            if (result.Ok)
-                return result.ChatInviteLink;
-            else
-                return null;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="result"></param>
-        /// <returns></returns>
-        public byte[] GetFileContent(FileDescriptor result)
-        {
-            return _communicator.GetFileContent(result.FilePath);
-        }
-
         /// <summary>
         /// sends a video to the chat
         /// </summary>
         /// <returns>on success, the sent message is returned</returns>
-        public Message SendAnimation(Chat chat, TelegramFile animation, long duration = long.MinValue, long width = long.MinValue, long height = long.MinValue, TelegramFile thumb = null, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool supportsStreaming = false, bool disableNotification = false, Message replyToMessage = null)
+        public Message SendAnimation(Chat chat, InputFile animation, long duration = long.MinValue, long width = long.MinValue, long height = long.MinValue, InputFile thumb = null, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool supportsStreaming = false, bool disableNotification = false, Message replyToMessage = null)
         {
             if (chat == null || animation == null)
                 throw new ArgumentNullException();
@@ -420,7 +399,7 @@ namespace nerderies.TelegramBotApi
         /// sends a voice message to the chat
         /// </summary>
         /// <returns>on success, the sent mesage is returned</returns>
-        public Message SendVoice(Chat chat, TelegramFile voice, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, long duration = long.MinValue, bool disableNotification = false, Message replyToMessage = null)
+        public Message SendVoice(Chat chat, InputFile voice, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, long duration = long.MinValue, bool disableNotification = false, Message replyToMessage = null)
         {
             if (chat == null || voice == null)
                 throw new ArgumentNullException();
@@ -458,7 +437,7 @@ namespace nerderies.TelegramBotApi
         /// sends a video note to the chat
         /// </summary>
         /// <returns>on success, the sent message is returned</returns>
-        public Message SendVideoNote(Chat chat, TelegramFile videoNote, long duration = long.MinValue, long length = long.MinValue, TelegramFile thumb = null, bool disableNotification = false, Message replyToMessage = null)
+        public Message SendVideoNote(Chat chat, InputFile videoNote, long duration = long.MinValue, long length = long.MinValue, InputFile thumb = null, bool disableNotification = false, Message replyToMessage = null)
         {
             if (chat == null || videoNote == null)
                 throw new ArgumentNullException();
@@ -554,6 +533,7 @@ namespace nerderies.TelegramBotApi
             else
                 return null;
         }
+
 
         //the api has different return values for inline messages, so when needed, make a different method i.e. StopInlineMessageLiveLocation
         public Message StopMessageLiveLocation(Message messageToUpdate)
@@ -722,6 +702,64 @@ namespace nerderies.TelegramBotApi
             if (result.Ok)
                 return result.File;
             else return null;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public byte[] GetFileContent(FileDescriptor result)
+        {
+            return _communicator.GetFileContent(result.FilePath);
+        }
+
+        /// <summary>
+        /// generates a new chat invitation link, renders any previously generated invitation links useless.
+        /// </summary>
+        /// <param name="chat"></param>
+        /// <returns></returns>
+        public string ExportChatInviteLink(Chat chat)
+        {
+            if (chat == null)
+                throw new ArgumentNullException();
+
+            var result = _communicator.GetReply<ExportChatInviteLinkReply>("exportChatInviteLink", new QueryStringParameter("chat_id", chat.Id.ToString()));
+            if (result.Ok)
+                return result.ChatInviteLink;
+            else
+                return null;
+        }
+
+        /// <summary>
+        /// changes or sets the chat photo of the given chat. bot must be channel admin or in a "all admin" chat
+        /// </summary>
+        /// <returns>true if successfull</returns>
+
+        public bool SetChatPhoto(Chat chat, InputFile photo)
+        {
+            if (chat == null || photo == null)
+                throw new ArgumentNullException();
+
+            var result = _communicator.GetMultiPartReply<SetChatPhotoReply>("setChatPhoto",
+                new MultiPartStringParameter("chat_id", chat.Id.ToString()),
+                photo.GetMultiPartParameter("photo"));
+
+            return result.Ok && result.Success;
+        }
+
+        /// <summary>
+        /// deletes the chat photo from the given chat. bot must be channel admin or in a "all admin" chat
+        /// </summary>
+        /// <returns>true if successful</returns>
+        public bool DeleteChatPhoto(Chat chat)
+        {
+            if (chat == null)
+                throw new ArgumentNullException();
+
+            var result = _communicator.GetMultiPartReply<DeleteChatPhotoReply>("deleteChatPhoto",
+                new MultiPartStringParameter("chat_id", chat.Id.ToString()));
+
+            return result.Ok && result.Success;
         }
 
         #endregion

@@ -109,12 +109,12 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         {
             byte[] bytes = _testobjects.TestPhoto;
 
-            var message = _b.SendPhoto(_testMessage.Chat, new TelegramFile(bytes, "testimage", "img/gif"), caption: "caption", replyToMessage: _testMessage);
+            var message = _b.SendPhoto(_testMessage.Chat, new InputFile(bytes, "testimage", "img/gif"), caption: "caption", replyToMessage: _testMessage);
             Assert.NotNull(message);
             Assert.NotNull(message.Photos);
             Assert.NotNull(message.ReplyToMessage);
             Assert.That(message.Photos.Length > 0);
-            var message2 = _b.SendPhoto(_testMessage.Chat, new TelegramFile(message.Photos[0].FileId), caption:"*echo with markdown*", markdownStyle: TelegramBot.MarkdownStyles.Markdown);
+            var message2 = _b.SendPhoto(_testMessage.Chat, new InputFile(message.Photos[0].FileId), caption:"*echo with markdown*", markdownStyle: TelegramBot.MarkdownStyles.Markdown);
             Assert.NotNull(message2);
             Assert.Null(message2.ReplyToMessage);
             Assert.That(message2.Photos.Length > 0);
@@ -129,7 +129,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         [Test]
         public void SendAudio_Returns()
         {
-            var m1 = _b.SendAudio(_testMessage.Chat, new TelegramFile(_testobjects.TestAudio, "test", "audio/mpeg"), thumb: new TelegramFile(_testobjects.TestThumb, "thumb", "img/jpeg"), performer: "cat", title: "testaudio");
+            var m1 = _b.SendAudio(_testMessage.Chat, new InputFile(_testobjects.TestAudio, "test", "audio/mpeg"), thumb: new InputFile(_testobjects.TestThumb, "thumb", "img/jpeg"), performer: "cat", title: "testaudio");
             Assert.NotNull(m1);
             Assert.NotNull(m1.Audio);
         }
@@ -137,10 +137,10 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         [Test]
         public void SendDocument_Returns()
         {
-            var m1 = _b.SendDocument(_testMessage.Chat, new TelegramFile(_testobjects.TestAudio, "testdocument", "audio/mpeg"), thumb: new TelegramFile(_testobjects.TestThumb, "thumb", "img/jpeg"));
+            var m1 = _b.SendDocument(_testMessage.Chat, new InputFile(_testobjects.TestAudio, "testdocument", "audio/mpeg"), thumb: new InputFile(_testobjects.TestThumb, "thumb", "img/jpeg"));
             Assert.NotNull(m1);
             Assert.NotNull(m1.Document);
-            var m2 = _b.SendDocument(_testMessage.Chat, new TelegramFile(m1.Document.FileId), thumb: new TelegramFile(m1.Document.Thumb.FileId));
+            var m2 = _b.SendDocument(_testMessage.Chat, new InputFile(m1.Document.FileId), thumb: new InputFile(m1.Document.Thumb.FileId));
             Assert.NotNull(m2);
             Assert.NotNull(m2.Document);
         }
@@ -148,7 +148,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         [Test]
         public void SendVideo_Returns()
         {
-            var m1 = _b.SendVideo(_testMessage.Chat, new TelegramFile(_testobjects.TestVideo, "light.mp4", "video/mp4"), thumb:new TelegramFile(_testobjects.TestThumb, "testthumb", "img/jpeg"));
+            var m1 = _b.SendVideo(_testMessage.Chat, new InputFile(_testobjects.TestVideo, "light.mp4", "video/mp4"), thumb:new InputFile(_testobjects.TestThumb, "testthumb", "img/jpeg"));
             Assert.NotNull(m1);
             Assert.NotNull(m1.Video);
         }
@@ -156,7 +156,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         [Test]
         public void SendAnimation_Returns()
         {
-            var m1 = _b.SendAnimation(_testMessage.Chat, new TelegramFile(_testobjects.TestAnimation, "test.gif", "img/gif"));
+            var m1 = _b.SendAnimation(_testMessage.Chat, new InputFile(_testobjects.TestAnimation, "test.gif", "img/gif"));
             Assert.NotNull(m1);
             Assert.NotNull(m1.Animation);
         }
@@ -164,7 +164,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         [Test]
         public void SendVoice_Returns()
         {
-            var m1 = _b.SendVoice(_testMessage.Chat, new TelegramFile(_testobjects.TestVoice, "test.ogg", "audio/ogg"));
+            var m1 = _b.SendVoice(_testMessage.Chat, new InputFile(_testobjects.TestVoice, "test.ogg", "audio/ogg"));
             Assert.NotNull(m1);
             Assert.NotNull(m1.Voice);
         }
@@ -172,7 +172,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         [Test]
         public void SendVideoNote_Returns()
         {
-            var m1 = _b.SendVideoNote(_testMessage.Chat, new TelegramFile(_testobjects.TestVideo, "videoNote", "video/mp4"));
+            var m1 = _b.SendVideoNote(_testMessage.Chat, new InputFile(_testobjects.TestVideo, "videoNote", "video/mp4"));
             Assert.NotNull(m1);
 
             //strangely, videoNote remains empty and the message is stored in the video property..
@@ -190,18 +190,36 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         [Test]
         public void LiveLocation_Returns_HasWorkingTimer()
         {
+            //let's create a bot object
+            var myBot = TelegramBot.GetBot("<mytoken");
+
+            while (true)
+            {
+                //lets get all updates for this bot
+                var myUpdates = myBot.GetUpdates();
+
+                foreach (var update in myUpdates)
+                {
+                    if (update.Message != null)
+                    {
+                        //we have received a message
+                        var message = update.Message;
+
+                        //lets answer
+                        myBot.SendMessage(update.Message.Chat, $"Thanks for your message, {message.From.FirstName}");
+                    }
+                }
+            }
+
             var originalMessage = _b.SendLocation(_testMessage.Chat, new Location() { Latitude = 48.305859, Longitude = 14.286459 }, livePeriod: 60);
             Assert.NotNull(originalMessage);
 
             for (int i = 0; i < 5; i++)
             {
-                System.Threading.Thread.Sleep(10000);
+                System.Threading.Thread.Sleep(5000);
                 originalMessage = _b.EditMessageLiveLocation(originalMessage, new Location() { Latitude = originalMessage.Location.Latitude + 0.001, Longitude = originalMessage.Location.Longitude + 0.001 });
                 Assert.NotNull(originalMessage);
             }
-
-            System.Threading.Thread.Sleep(30000);
-            Assert.Throws<WebException>(() => _b.EditMessageLiveLocation(originalMessage, new Location() { Latitude = originalMessage.Location.Latitude + 0.001, Longitude = originalMessage.Location.Longitude + 0.001 }));
 
             var abortLiveLocation = _b.SendLocation(_testMessage.Chat, new Location() { Latitude = 48.305859, Longitude = 14.286459 }, livePeriod: 60);
             Assert.NotNull(abortLiveLocation);
@@ -278,7 +296,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             int cnt = 0;
             foreach(var x in m1)
             {
-                _b.SendPhoto(_testMessage.Chat, new TelegramFile(x[0].FileId), caption: $"Photo {cnt}:{x[0].FileId}");
+                _b.SendPhoto(_testMessage.Chat, new InputFile(x[0].FileId), caption: $"Photo {cnt}:{x[0].FileId}");
                 cnt++;
                 if (cnt > 4)
                     break;
@@ -300,7 +318,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
                 var bytes = _b.GetFileContent(result);
                 Assert.NotNull(bytes);
                 Assert.That(bytes.Length > 0);
-                var m2 = _b.SendDocument(_testMessage.Chat, new TelegramFile(bytes, "fileTransferTest", "img/jpeg"));
+                var m2 = _b.SendDocument(_testMessage.Chat, new InputFile(bytes, "fileTransferTest", "img/jpeg"));
                 Assert.NotNull(m2);
                 Assert.NotNull(m2.Document);
             }
@@ -317,7 +335,16 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             Assert.That(linkOne != linkTwo);
 
             Assert.Throws<WebException>(() => _b.ExportChatInviteLink(_testMessage.Chat));
-            
+        }
+
+        [Test]
+        public void SetChatPhoto_DeleteChatPhoto_Returns()
+        {
+            Assert.That(_b.SetChatPhoto(_testChannelPost.Chat, new InputFile(_testobjects.TestPhoto, "chatphoto.jpg", "image/jpeg")));
+            Assert.That(_b.DeleteChatPhoto(_testChannelPost.Chat));
+
+            Assert.Throws<WebException>(()=>_b.SetChatPhoto(_testMessage.Chat, new InputFile(_testobjects.TestPhoto, "chatphoto.jpg", "image/jpeg")));
+            Assert.Throws<WebException>(() => _b.DeleteChatPhoto(_testMessage.Chat));
         }
     }
 }

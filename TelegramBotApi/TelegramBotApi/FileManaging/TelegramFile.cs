@@ -2,7 +2,7 @@
 
 namespace nerderies.TelegramBotApi
 {
-    public class TelegramFile
+    public class InputFile
     {
         #region public types
 
@@ -25,14 +25,14 @@ namespace nerderies.TelegramBotApi
 
         #region .ctor
 
-        public TelegramFile(byte[] data, string fileName, string mime)
+        public InputFile(byte[] data, string fileName, string mime)
         {
             _data = data;
             _fileName = fileName;
             _mime = mime;
             Mode = FileDescriptionMode.RealFile;
         }
-        public TelegramFile(string fileIdorUrl)
+        public InputFile(string fileIdorUrl)
         {
             _fileIdOrUrl = fileIdorUrl;
             Mode = FileDescriptionMode.ReferencedFile;
