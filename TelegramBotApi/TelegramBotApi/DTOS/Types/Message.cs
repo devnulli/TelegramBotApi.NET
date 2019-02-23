@@ -118,6 +118,7 @@ namespace nerderies.TelegramBotApi.DTOS
 
         [JsonProperty("delete_chat_photo")]
         public bool DeleteChatPhoto;
+
         [JsonProperty("group_chat_created")]
         public bool GroupChatCreated;
 

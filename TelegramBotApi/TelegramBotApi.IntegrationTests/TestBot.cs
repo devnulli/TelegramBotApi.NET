@@ -357,5 +357,26 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             //reaction on unpinnin in private chat
             Assert.Throws<WebException>(() => _b.UnpinChatMessage(privateMessage.Chat));
         }
+
+        [Test]
+        public void GetChat_Returns()
+        {
+            var channel = _b.GetChat(_testChannelPost.Chat.Id);
+            Assert.NotNull(channel);
+
+            var chat = _b.GetChat(_testMessage.Chat.Id);
+            Assert.NotNull(chat);
+        }
+
+        [Test]
+        public void GetChatAdministrators_Returns()
+        {
+            var admins1 = _b.GetChatAdministrators(_testChannelPost.Chat);
+            Assert.NotNull(admins1);
+            Assert.That(admins1.Count > 0);
+
+            Assert.Throws<WebException>(() => _b.GetChatAdministrators(_testMessage.Chat));
+
+        }
     }
 }

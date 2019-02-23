@@ -21,6 +21,9 @@
 - implemented setChatDescription
 - implemented pinChatMessage
 - implemented unpinChatMessage
+- implemented leaveChat
+- implemented getChat
+- implemented getChatAdministrators
 
 0.5.1.4 (2019-02-21)
 + implemented getUserProfilePhotos method

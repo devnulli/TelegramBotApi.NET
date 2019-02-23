@@ -640,6 +640,7 @@ namespace nerderies.TelegramBotApi
             };
 
             var reply = _communicator.GetReply<SendChatActionReply>("sendChatAction", parameters.ToArray());
+
             if (reply.Ok)
             {
                 return reply.Result;
@@ -828,6 +829,53 @@ namespace nerderies.TelegramBotApi
 
             return result.Ok && result.Success;
         }
+
+        /// <summary>
+        /// Leaves a Chat 
+        /// </summary>
+        /// <returns>true on success</returns>
+       
+        //this is not integration tested due to the lack of a JOIN CHAT method
+        public bool LeaveChat(Chat chat)
+        {
+            if (chat == null)
+                throw new ArgumentNullException();
+
+            var result = _communicator.GetReply<LeaveChatReply>("leaveChat",
+                new QueryStringParameter("chat_id", chat.Id.ToString()));
+
+            return result.Ok && result.Success;
+        }
+
+        /// <summary>
+        /// gets info about a chat
+        /// </summary>
+        /// <returns>a Chat object or null if not successful</returns>
+        public Chat GetChat(long chatId)
+        {
+            var result = _communicator.GetReply<GetChatReply>("getChat",
+                new QueryStringParameter("chat_id", chatId.ToString()));
+
+            if (result.Ok)
+                return result.Chat;
+            else
+                return null;
+        }
+
+        public IList<ChatMember> GetChatAdministrators(Chat chat)
+        {
+            if (chat == null)
+                throw new ArgumentNullException();
+
+            var result = _communicator.GetReply<GetChatAdministratorsReply>("getChatAdministrators",
+                new QueryStringParameter("chat_id", chat.Id.ToString()));
+
+            if (result.Ok)
+                return new List<ChatMember>(result.Administrators);
+            else
+                return null;
+        }
+
         #endregion
     }
 }
