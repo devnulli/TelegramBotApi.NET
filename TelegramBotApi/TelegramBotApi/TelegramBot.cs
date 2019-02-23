@@ -534,7 +534,6 @@ namespace nerderies.TelegramBotApi
                 return null;
         }
 
-
         //the api has different return values for inline messages, so when needed, make a different method i.e. StopInlineMessageLiveLocation
         public Message StopMessageLiveLocation(Message messageToUpdate)
         {
@@ -733,8 +732,7 @@ namespace nerderies.TelegramBotApi
         /// <summary>
         /// changes or sets the chat photo of the given chat. bot must be channel admin or in a "all admin" chat
         /// </summary>
-        /// <returns>true if successfull</returns>
-
+        /// <returns>true on success</returns>
         public bool SetChatPhoto(Chat chat, InputFile photo)
         {
             if (chat == null || photo == null)
@@ -750,7 +748,7 @@ namespace nerderies.TelegramBotApi
         /// <summary>
         /// deletes the chat photo from the given chat. bot must be channel admin or in a "all admin" chat
         /// </summary>
-        /// <returns>true if successful</returns>
+        /// <returns>true on success</returns>
         public bool DeleteChatPhoto(Chat chat)
         {
             if (chat == null)
@@ -762,6 +760,74 @@ namespace nerderies.TelegramBotApi
             return result.Ok && result.Success;
         }
 
+        /// <summary>
+        /// sets the title of a chat. 
+        /// </summary>
+        /// <returns>true on success</returns>
+        public bool SetChatTitle(Chat chat, string title)
+        {
+            if (chat == null || title == null)
+                throw new ArgumentNullException();
+
+            if (title.Length > 255  || title.Length < 1)
+                throw new ArgumentException("title must be between 1 and 255 characters");
+
+            var result = _communicator.GetReply<SetChatTitleReply>("setChatTitle",
+                new QueryStringParameter("chat_id", chat.Id.ToString()),
+                new QueryStringParameter("title", title));
+
+            return result.Ok && result.Success;
+        }
+
+        /// <summary>
+        /// sets the description of a chat. 
+        /// </summary>
+        /// <returns>true on success</returns>
+        public bool SetChatDescription(Chat chat, string description)
+        {
+            if (chat == null || description == null)
+                throw new ArgumentNullException();
+
+            if (description.Length > 255)
+                throw new ArgumentException("title must be between 0 and 255 characters");
+
+            var result = _communicator.GetReply<SetChatDescriptionReply>("setChatDescription",
+                new QueryStringParameter("chat_id", chat.Id.ToString()),
+                new QueryStringParameter("description", description));
+
+            return result.Ok && result.Success;
+        }
+
+        /// <summary>
+        /// pins a message to the chat 
+        /// </summary>
+        /// <returns>true on success</returns>
+        public bool PinChatMessage(Message message)
+        {
+            if (message == null)
+                throw new ArgumentNullException();
+
+            var result = _communicator.GetReply<PinChatMessageReply>("pinChatMessage",
+                new QueryStringParameter("chat_id", message.Chat.Id.ToString()),
+                new QueryStringParameter("message_id", message.MessageId.ToString()));
+
+            return result.Ok && result.Success;
+        }
+
+        /// <summary>
+        /// unpins messages from the chat
+        /// </summary>
+        /// <returns>true on success</returns>
+        public bool UnpinChatMessage(Chat chat)
+        {
+            if (chat == null)
+                throw new ArgumentNullException();
+
+            var result = _communicator.GetReply<UnpinChatMessageReply>("unpinChatMessage",
+                new QueryStringParameter("chat_id", chat.Id.ToString()));
+
+            return result.Ok && result.Success;
+        }
         #endregion
     }
 }

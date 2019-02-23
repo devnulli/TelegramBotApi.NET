@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>nerderies.TelegramBotApi</RootNamespace>
     <AssemblyName>TelegramBotApi</AssemblyName>
-    <Version>0.5.1.4</Version>
+    <Version>0.5.1.5</Version>
     <Authors>devnulli</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>nerderies.TelegramBotApi</PackageId>
@@ -16,7 +16,13 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
-    <PackageReleaseNotes>0.5.1.4 (2019-02-21)
+    <PackageReleaseNotes>0.5.1.5 (NEXT)
+- implemented setChatTitle
+- implemented setChatDescription
+- implemented pinChatMessage
+- implemented unpinChatMessage
+
+0.5.1.4 (2019-02-21)
 + implemented getUserProfilePhotos method
 + implemented getFile method
 + implemented getFileContent method

@@ -325,5 +325,37 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             Assert.Throws<WebException>(()=>_b.SetChatPhoto(_testMessage.Chat, new InputFile(_testobjects.TestPhoto, "chatphoto.jpg", "image/jpeg")));
             Assert.Throws<WebException>(() => _b.DeleteChatPhoto(_testMessage.Chat));
         }
+
+        [Test]
+        public void SetChatTitle_Returns()
+        {
+            Assert.That(_b.SetChatTitle(_testChannelPost.Chat, "new chat title"));
+            Assert.That(_b.SetChatTitle(_testChannelPost.Chat, "Telegram Bot API Test Channel"));
+            Assert.Throws<WebException>(() => _b.SetChatTitle(_testMessage.Chat, "this should not work"));
+        }
+
+        [Test]
+        public void SetChatDescription_Returns()
+        {
+            Assert.That(_b.SetChatDescription(_testChannelPost.Chat, "new chat description"));
+            Assert.That(_b.SetChatDescription(_testChannelPost.Chat, "This is your personal Telegram Bot API Test Channel"));
+            Assert.Throws<WebException>(() => _b.SetChatDescription(_testMessage.Chat, "this should not work"));
+        }
+
+        [Test]
+        public void Pin_Unpin_ChatMessage_Returns()
+        {
+            var channelMessage = _b.SendMessage(_testChannelPost.Chat, "pinned message");
+            var privateMessage = _b.SendMessage(_testMessage.Chat, "pinning this should fail");
+            Assert.That(_b.PinChatMessage(channelMessage));
+            Assert.That(_b.UnpinChatMessage(channelMessage.Chat));
+            //reaction on no present message
+            Assert.Throws<WebException>(()=>_b.UnpinChatMessage(channelMessage.Chat));
+
+            Assert.Throws<WebException>(() => _b.PinChatMessage(privateMessage));
+
+            //reaction on unpinnin in private chat
+            Assert.Throws<WebException>(() => _b.UnpinChatMessage(privateMessage.Chat));
+        }
     }
 }
