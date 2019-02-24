@@ -188,24 +188,19 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         }
 
         [Test]
-        public void LiveLocation_Returns_HasWorkingTimer()
+        public void LiveLocation_Returns()
         {
             var originalMessage = _b.SendLocation(_testMessage.Chat, new Location() { Latitude = 48.305859, Longitude = 14.286459 }, livePeriod: 60);
             Assert.NotNull(originalMessage);
 
             for (int i = 0; i < 5; i++)
             {
-                System.Threading.Thread.Sleep(5000);
+                System.Threading.Thread.Sleep(3000);
                 originalMessage = _b.EditMessageLiveLocation(originalMessage, new Location() { Latitude = originalMessage.Location.Latitude + 0.001, Longitude = originalMessage.Location.Longitude + 0.001 });
                 Assert.NotNull(originalMessage);
             }
 
-            var abortLiveLocation = _b.SendLocation(_testMessage.Chat, new Location() { Latitude = 48.305859, Longitude = 14.286459 }, livePeriod: 60);
-            Assert.NotNull(abortLiveLocation);
-            abortLiveLocation = _b.StopMessageLiveLocation(abortLiveLocation);
-            Assert.NotNull(abortLiveLocation);
-            System.Threading.Thread.Sleep(2000);
-            Assert.Throws<WebException>(() => _b.EditMessageLiveLocation(abortLiveLocation, new Location() { Latitude = originalMessage.Location.Latitude + 0.001, Longitude = originalMessage.Location.Longitude + 0.001 }));
+            Assert.NotNull(_b.StopMessageLiveLocation(originalMessage));
         }
 
         [Test]
