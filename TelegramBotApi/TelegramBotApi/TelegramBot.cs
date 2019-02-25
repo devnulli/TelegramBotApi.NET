@@ -902,6 +902,56 @@ namespace nerderies.TelegramBotApi
                 return null;
         }
 
+        /// <summary>
+        /// Use this method to get the number of members in a chat.
+        /// </summary>
+        /// <returns>the number of members in a chat</returns>
+        public long GetChatMembersCount(Chat chat)
+        {
+            if (chat == null)
+                throw new ArgumentNullException();
+
+            var reply = _communicator.GetReply<GetChatMembersCountReply>("getChatMembersCount",
+                new QueryStringParameter("chat_id", chat.Id.ToString()));
+
+            if (reply.Ok)
+                return reply.ChatMembersCount;
+            else
+                throw new Exception("Could not get ChatMembers count for this chat");
+            
+        }
+
+        /// <summary>
+        /// Use this method to get information about a member of a chat.
+        /// </summary>
+        /// <returns>Returns a ChatMember object on success.</returns>
+        public ChatMember GetChatMember(Chat chat, User user)
+        {
+            if (user == null)
+                throw new ArgumentNullException();
+
+            return GetChatMember(chat, user.Id);
+        }
+
+        /// <summary>
+        /// Use this method to get information about a member of a chat. 
+        /// this seems to not work for channelposts, because they do not appear to return the sending user as of 2019-02-25
+        /// </summary>
+        /// <returns>Returns a ChatMember object on success.</returns>
+        public ChatMember GetChatMember(Chat chat, long userId)
+        {
+            if (chat == null)
+                throw new ArgumentNullException();
+
+            var reply = _communicator.GetReply<GetChatMemberReply>("getChatMember",
+                new QueryStringParameter("chat_id", chat.Id.ToString()),
+                new QueryStringParameter("user_id", userId.ToString()));
+
+            if (reply.Ok)
+                return reply.Result;
+            else
+                return null;
+        }
         #endregion
     }
 }

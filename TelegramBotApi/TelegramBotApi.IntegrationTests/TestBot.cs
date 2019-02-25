@@ -373,5 +373,22 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             Assert.Throws<WebException>(() => _b.GetChatAdministrators(_testMessage.Chat));
 
         }
+
+        [Test]
+        public void GetChatMembersCount_Returns()
+        {
+            var count1 = _b.GetChatMembersCount(_testChannelPost.Chat);
+            Assert.That(count1 > 0);
+
+            var count2 = _b.GetChatMembersCount(_testMessage.Chat);
+            Assert.That(count2 > 0);
+        }
+
+        [Test]
+        public void GetChatMember_Returns()
+        {
+            var member2 = _b.GetChatMember(_testMessage.Chat, _testMessage.From);
+            Assert.NotNull(member2);
+        }
     }
 }
