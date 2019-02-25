@@ -534,16 +534,20 @@ namespace nerderies.TelegramBotApi
                 return null;
         }
 
+        /// <summary>
+        /// Use this method to stop updating a live location message sent by the bot or via the bot (for inline bots) before live_period expires
+        /// </summary>
+        /// <returns></returns>
         //the api has different return values for inline messages, so when needed, make a different method i.e. StopInlineMessageLiveLocation
-        public Message StopMessageLiveLocation(Message messageToUpdate)
+        public Message StopMessageLiveLocation(Message messageToStop)
         {
-            if (messageToUpdate == null)
+            if (messageToStop == null)
                 throw new ArgumentNullException();
 
             var parameters = new List<QueryStringParameter>
             {
-                new QueryStringParameter("chat_id", messageToUpdate.Chat.Id.ToString()),
-                new QueryStringParameter("message_id", messageToUpdate.MessageId.ToString()),
+                new QueryStringParameter("chat_id", messageToStop.Chat.Id.ToString()),
+                new QueryStringParameter("message_id", messageToStop.MessageId.ToString()),
             };
 
             var result = _communicator.GetReply<StopMessageLiveLocationReply>("stopMessageLiveLocation", parameters.ToArray());
@@ -554,6 +558,10 @@ namespace nerderies.TelegramBotApi
                 return null;
         }
 
+        /// <summary>
+        /// Use this method to send information about a venue.
+        /// </summary>
+        /// <returns>on success, the sent Message is returned</returns>
         public Message SendVenue(Chat chat, Location location, string title = null, string address = null, string foursquareId = null, string foursquareType = null, bool disableNotification = false, Message replyToMessage = null)
         {
             if (chat == null || location == null)
@@ -592,6 +600,10 @@ namespace nerderies.TelegramBotApi
                 return null;
         }
 
+        /// <summary>
+        /// Use this method to send phone contacts
+        /// </summary>
+        /// <returns>On success, the sent Message is returned.</returns>
         public Message SendContact(Chat chat, string phoneNumber, string firstName, string lastName = null, string vcard = null, bool disableNotification = false, Message replyToMessage = null)
         {
             if (chat == null || phoneNumber == null || firstName == null)
@@ -650,6 +662,10 @@ namespace nerderies.TelegramBotApi
 
         }
 
+        /// <summary>
+        /// returns the profile photos of a user in different qualities
+        /// </summary>
+        /// <returns>A list of Photosize arrays, where each list element contains different qualities of the photo in an array</returns>
         public IList<PhotoSize[]> GetUserProfilePhotos(User user, int maxPhotos = int.MaxValue)
         {
             if (user == null)
@@ -674,12 +690,12 @@ namespace nerderies.TelegramBotApi
 
             do
             {
-                var result = _communicator.GetReply<GetUserProfilePhotosReply>("getUserProfilePhotos", parameters.ToArray());
-                if (!result.Ok)
+                var reply = _communicator.GetReply<GetUserProfilePhotosReply>("getUserProfilePhotos", parameters.ToArray());
+                if (!reply.Ok)
                     return null;
 
-                totalCount = result.UserProfilePhotos.TotalCount;
-                photos.AddRange(result.UserProfilePhotos.Photos);
+                totalCount = reply.UserProfilePhotos.TotalCount;
+                photos.AddRange(reply.UserProfilePhotos.Photos);
 
                 offset += stepsize;
                 offsetParameter.Value = offset.ToString();
@@ -691,20 +707,27 @@ namespace nerderies.TelegramBotApi
             return photos;
         }
 
+        /// <summary>
+        /// returns a FileDescriptor object which contains info about a file and can be used to download the file
+        /// </summary>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
         public FileDescriptor GetFile(string fileId)
         {
             if (fileId == null)
                 throw new ArgumentNullException();
 
             var id = new QueryStringParameter("file_id", fileId);
-            var result = _communicator.GetReply<GetFileReply>("getFile", id);
+            var reply = _communicator.GetReply<GetFileReply>("getFile", id);
 
-            if (result.Ok)
-                return result.File;
-            else return null;
+            if (reply.Ok)
+                return reply.File;
+            else
+                return null;
         }
 
         /// <summary>
+        /// Tries to download the content of a File described in a FileDescriptor object
         /// </summary>
         /// <param name="result"></param>
         /// <returns></returns>
@@ -723,9 +746,9 @@ namespace nerderies.TelegramBotApi
             if (chat == null)
                 throw new ArgumentNullException();
 
-            var result = _communicator.GetReply<ExportChatInviteLinkReply>("exportChatInviteLink", new QueryStringParameter("chat_id", chat.Id.ToString()));
-            if (result.Ok)
-                return result.ChatInviteLink;
+            var reply = _communicator.GetReply<ExportChatInviteLinkReply>("exportChatInviteLink", new QueryStringParameter("chat_id", chat.Id.ToString()));
+            if (reply.Ok)
+                return reply.ChatInviteLink;
             else
                 return null;
         }
@@ -739,11 +762,11 @@ namespace nerderies.TelegramBotApi
             if (chat == null || photo == null)
                 throw new ArgumentNullException();
 
-            var result = _communicator.GetMultiPartReply<SetChatPhotoReply>("setChatPhoto",
+            var reply = _communicator.GetMultiPartReply<SetChatPhotoReply>("setChatPhoto",
                 new MultiPartStringParameter("chat_id", chat.Id.ToString()),
                 photo.GetMultiPartParameter("photo"));
 
-            return result.Ok && result.Success;
+            return reply.Ok && reply.Success;
         }
 
         /// <summary>
@@ -755,10 +778,10 @@ namespace nerderies.TelegramBotApi
             if (chat == null)
                 throw new ArgumentNullException();
 
-            var result = _communicator.GetMultiPartReply<DeleteChatPhotoReply>("deleteChatPhoto",
+            var reply = _communicator.GetMultiPartReply<DeleteChatPhotoReply>("deleteChatPhoto",
                 new MultiPartStringParameter("chat_id", chat.Id.ToString()));
 
-            return result.Ok && result.Success;
+            return reply.Ok && reply.Success;
         }
 
         /// <summary>
@@ -773,11 +796,11 @@ namespace nerderies.TelegramBotApi
             if (title.Length > 255  || title.Length < 1)
                 throw new ArgumentException("title must be between 1 and 255 characters");
 
-            var result = _communicator.GetReply<SetChatTitleReply>("setChatTitle",
+            var reply = _communicator.GetReply<SetChatTitleReply>("setChatTitle",
                 new QueryStringParameter("chat_id", chat.Id.ToString()),
                 new QueryStringParameter("title", title));
 
-            return result.Ok && result.Success;
+            return reply.Ok && reply.Success;
         }
 
         /// <summary>
@@ -792,11 +815,11 @@ namespace nerderies.TelegramBotApi
             if (description.Length > 255)
                 throw new ArgumentException("title must be between 0 and 255 characters");
 
-            var result = _communicator.GetReply<SetChatDescriptionReply>("setChatDescription",
+            var reply = _communicator.GetReply<SetChatDescriptionReply>("setChatDescription",
                 new QueryStringParameter("chat_id", chat.Id.ToString()),
                 new QueryStringParameter("description", description));
 
-            return result.Ok && result.Success;
+            return reply.Ok && reply.Success;
         }
 
         /// <summary>
@@ -808,11 +831,11 @@ namespace nerderies.TelegramBotApi
             if (message == null)
                 throw new ArgumentNullException();
 
-            var result = _communicator.GetReply<PinChatMessageReply>("pinChatMessage",
+            var reply = _communicator.GetReply<PinChatMessageReply>("pinChatMessage",
                 new QueryStringParameter("chat_id", message.Chat.Id.ToString()),
                 new QueryStringParameter("message_id", message.MessageId.ToString()));
 
-            return result.Ok && result.Success;
+            return reply.Ok && reply.Success;
         }
 
         /// <summary>
@@ -824,54 +847,57 @@ namespace nerderies.TelegramBotApi
             if (chat == null)
                 throw new ArgumentNullException();
 
-            var result = _communicator.GetReply<UnpinChatMessageReply>("unpinChatMessage",
+            var reply = _communicator.GetReply<UnpinChatMessageReply>("unpinChatMessage",
                 new QueryStringParameter("chat_id", chat.Id.ToString()));
 
-            return result.Ok && result.Success;
+            return reply.Ok && reply.Success;
         }
 
         /// <summary>
         /// Leaves a Chat 
         /// </summary>
         /// <returns>true on success</returns>
-       
         //this is not integration tested due to the lack of a JOIN CHAT method
         public bool LeaveChat(Chat chat)
         {
             if (chat == null)
                 throw new ArgumentNullException();
 
-            var result = _communicator.GetReply<LeaveChatReply>("leaveChat",
+            var reply = _communicator.GetReply<LeaveChatReply>("leaveChat",
                 new QueryStringParameter("chat_id", chat.Id.ToString()));
 
-            return result.Ok && result.Success;
+            return reply.Ok && reply.Success;
         }
 
         /// <summary>
-        /// gets info about a chat
+        /// Gets info about a chat.
         /// </summary>
         /// <returns>a Chat object or null if not successful</returns>
         public Chat GetChat(long chatId)
         {
-            var result = _communicator.GetReply<GetChatReply>("getChat",
+            var reply = _communicator.GetReply<GetChatReply>("getChat",
                 new QueryStringParameter("chat_id", chatId.ToString()));
 
-            if (result.Ok)
-                return result.Chat;
+            if (reply.Ok)
+                return reply.Chat;
             else
                 return null;
         }
 
+        /// <summary>
+        /// Gets the administrators of a chat.
+        /// </summary>
+        /// <returns>returns an Array of ChatMembers that contains information about all chat administrators except other bots</returns>
         public IList<ChatMember> GetChatAdministrators(Chat chat)
         {
             if (chat == null)
                 throw new ArgumentNullException();
 
-            var result = _communicator.GetReply<GetChatAdministratorsReply>("getChatAdministrators",
+            var reply = _communicator.GetReply<GetChatAdministratorsReply>("getChatAdministrators",
                 new QueryStringParameter("chat_id", chat.Id.ToString()));
 
-            if (result.Ok)
-                return new List<ChatMember>(result.Administrators);
+            if (reply.Ok)
+                return new List<ChatMember>(reply.Administrators);
             else
                 return null;
         }
