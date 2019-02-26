@@ -19,6 +19,9 @@
     <PackageReleaseNotes>0.5.1.7 (CURRENT)
 - implemented getChatMembersCount
 - implemented getChatMember
+- implemented setChatStickerSet
+- implemented deleteChatStickerSet
+
 
 
 0.5.1.6 (2019-02-23)

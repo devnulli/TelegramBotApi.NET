@@ -952,6 +952,43 @@ namespace nerderies.TelegramBotApi
             else
                 return null;
         }
+
+        /// <summary>
+        /// Use this method to set a new group sticker set for a supergroup.
+        /// </summary>
+        /// <returns>Returns True on success.</returns>
+        //TODO integration test is missing 
+        public bool SetChatStickerSet(Chat chat, string stickerSetName)
+        {
+            if (chat == null || stickerSetName == null)
+                throw new ArgumentNullException();
+
+            if (string.IsNullOrEmpty(stickerSetName))
+                throw new ArgumentException("stickerSetName was empty");
+
+            var reply = _communicator.GetReply<SetChatStickerSetReply>("setChatStickerSet",
+                new QueryStringParameter("chat_id", chat.Id.ToString()),
+                new QueryStringParameter("sticker_set_name", stickerSetName));
+
+            return reply.Ok && reply.Success;
+        }
+
+        /// <summary>
+        /// Use this method to delete a group sticker set from a supergroup.
+        /// </summary>
+        /// <returns>Returns True on success.</returns>
+        //TODO integration test is missing
+        public bool DeleteChatStickerSet(Chat chat)
+        {
+            if (chat == null)
+                throw new ArgumentNullException();
+
+            var reply = _communicator.GetReply<DeleteChatStickerSetReply>("setChatStickerSet",
+                new QueryStringParameter("chat_id", chat.Id.ToString()));
+
+            return reply.Ok && reply.Success;
+        }
+
         #endregion
     }
 }

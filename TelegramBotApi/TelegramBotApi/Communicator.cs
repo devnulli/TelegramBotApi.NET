@@ -15,9 +15,9 @@ namespace nerderies.TelegramBotApi
     {
         #region private members
 
-        private string _authenticationToken = null;
+        private readonly string _authenticationToken = null;
         private WebClient _webClient = new WebClient();
-        private long _rateLimitingMilliSeconds = 0;
+        private readonly long _rateLimitingMilliSeconds = 0;
         private DateTime _lastRequest = DateTime.MinValue;
 
         #endregion
