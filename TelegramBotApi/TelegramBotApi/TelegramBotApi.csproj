@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>nerderies.TelegramBotApi</RootNamespace>
     <AssemblyName>TelegramBotApi</AssemblyName>
-    <Version>0.5.1.7</Version>
+    <Version>0.5.1.8</Version>
     <Authors>devnulli</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>nerderies.TelegramBotApi</PackageId>
@@ -16,7 +16,9 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
-    <PackageReleaseNotes>0.5.1.7 (CURRENT)
+    <PackageReleaseNotes>0.5.1.8 (CURRENT)
+
+0.5.1.7 (2019-03-03)
 - implemented getChatMembersCount
 - implemented getChatMember
 - implemented setChatStickerSet
