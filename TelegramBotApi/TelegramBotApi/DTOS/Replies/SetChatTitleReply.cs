@@ -4,9 +4,6 @@ namespace nerderies.TelegramBotApi.DTOS
 {
     public class SetChatTitleReply : Reply
     {
-        [JsonProperty("ok")]
-        public bool Ok;
-
         [JsonProperty("result")]
         public bool Success;
     }

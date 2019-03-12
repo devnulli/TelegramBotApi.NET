@@ -4,9 +4,6 @@ namespace nerderies.TelegramBotApi.DTOS
 {
     public class SendContactReply : Reply
     {
-        [JsonProperty("ok")]
-        public bool Ok;
-
         [JsonProperty("result")]
         public Message SentMessage;
     }
