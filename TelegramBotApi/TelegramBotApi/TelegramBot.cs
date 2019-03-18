@@ -38,6 +38,17 @@ namespace nerderies.TelegramBotApi
 
         #endregion
 
+        #region private operations
+        private void Require(params object[] objects)
+        {
+            foreach(var o in objects)
+            {
+                if (o == null)
+                    throw new ArgumentNullException();
+            }
+        }
+        #endregion
+
         #region public .ctor
 
         /// <summary>
@@ -101,8 +112,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>on success, the sent Message is returned </returns>
         public Message SendMessage(Chat chat, string text, MarkdownStyles markdownStyle = MarkdownStyles.None, bool disableWebPagePreview = false, bool disableNotification = false, Message replyToMessage = null)
         {
-            if (chat == null || text == null)
-                throw new ArgumentNullException();
+            Require(chat, text);
 
             if (string.IsNullOrEmpty(text))
                 throw new ArgumentException("text cannot be empty");
@@ -153,8 +163,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>if successful, the sent message is returned</returns>
         public Message ForwardMessage(Message messageToForward, Chat chatToForwardTo, bool disableNotification = false)
         {
-            if (chatToForwardTo == null || messageToForward == null)
-                throw new ArgumentNullException();
+            Require(messageToForward, chatToForwardTo);
 
             List<QueryStringParameter> parameters = new List<QueryStringParameter>()
             {
@@ -176,8 +185,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>on success, the sent Message is returned </returns>
         public Message SendPhoto(Chat chat, InputFile photo, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool disableNotification = false, Message replyToMessage = null)
         {
-            if (chat == null || photo == null)
-                throw new ArgumentNullException();
+            Require(chat, photo);
 
             var parameters = new List<MultiPartParameter>
             {
@@ -219,8 +227,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>on success, the sent Message is returned</returns>
         public Message SendAudio(Chat chat, InputFile audio, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, long duration = long.MinValue, string performer = null, string title = null, InputFile thumb = null, bool disableNotification = false, Message replyToMessage = null)
         {
-            if (chat == null || audio == null)
-                throw new ArgumentNullException();
+            Require(chat, audio);
 
             var parameters = new List<MultiPartParameter>
             {
@@ -266,8 +273,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>on success, the sent message is returned</returns>
         public Message SendDocument(Chat chat, InputFile document, InputFile thumb = null, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool disableNotification = false, Message replyToMessage = null )
         {
-            if (chat == null || document == null)
-                throw new ArgumentNullException();
+            Require(chat, document);
 
             var parameters = new List<MultiPartParameter>()
             {
@@ -304,8 +310,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>on success, the sent message is returned</returns>
         public Message SendVideo(Chat chat, InputFile video, long duration = long.MinValue, long width = long.MinValue, long height = long.MinValue, InputFile thumb = null, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool supportsStreaming = false, bool disableNotification = false, Message replyToMessage = null)
         {
-            if (chat == null || video == null)
-                throw new ArgumentNullException();
+            Require(chat, video);
 
             var parameters = new List<MultiPartParameter>()
             {
@@ -354,8 +359,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>on success, the sent message is returned</returns>
         public Message SendAnimation(Chat chat, InputFile animation, long duration = long.MinValue, long width = long.MinValue, long height = long.MinValue, InputFile thumb = null, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool supportsStreaming = false, bool disableNotification = false, Message replyToMessage = null)
         {
-            if (chat == null || animation == null)
-                throw new ArgumentNullException();
+            Require(chat, animation);
 
             var parameters = new List<MultiPartParameter>()
             {
@@ -401,8 +405,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>on success, the sent mesage is returned</returns>
         public Message SendVoice(Chat chat, InputFile voice, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, long duration = long.MinValue, bool disableNotification = false, Message replyToMessage = null)
         {
-            if (chat == null || voice == null)
-                throw new ArgumentNullException();
+            Require(chat, voice);
 
             var parameters = new List<MultiPartParameter>()
             {
@@ -439,8 +442,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>on success, the sent message is returned</returns>
         public Message SendVideoNote(Chat chat, InputFile videoNote, long duration = long.MinValue, long length = long.MinValue, InputFile thumb = null, bool disableNotification = false, Message replyToMessage = null)
         {
-            if (chat == null || videoNote == null)
-                throw new ArgumentNullException();
+            Require(chat, videoNote);
 
             var parameters = new List<MultiPartParameter>()
             {
@@ -477,8 +479,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>on success, the sent location is returned</returns>
         public Message SendLocation(Chat chat, Location location, long livePeriod = long.MinValue, bool disableNotification = false, Message replyToMessage = null)
         {
-            if (chat == null || location == null)
-                throw new ArgumentNullException();
+            Require(chat, location);
 
             if (livePeriod != long.MinValue && (livePeriod < 60 || livePeriod > 86400))
                 throw new ArgumentException("Liveperiod should be between 60 and 86400");
@@ -515,8 +516,7 @@ namespace nerderies.TelegramBotApi
         //the api has different return values for inline messages, so when needed, make a different method i.e. EditInlineMessageLiveLocation
         public Message EditMessageLiveLocation(Message messageToUpdate, Location newLocation)
         {
-            if (messageToUpdate == null || newLocation == null)
-                throw new ArgumentNullException();
+            Require(messageToUpdate, newLocation);
 
             var parameters = new List<QueryStringParameter>
             {
@@ -541,8 +541,7 @@ namespace nerderies.TelegramBotApi
         //the api has different return values for inline messages, so when needed, make a different method i.e. StopInlineMessageLiveLocation
         public Message StopMessageLiveLocation(Message messageToStop)
         {
-            if (messageToStop == null)
-                throw new ArgumentNullException();
+            Require(messageToStop);
 
             var parameters = new List<QueryStringParameter>
             {
@@ -564,8 +563,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>on success, the sent Message is returned</returns>
         public Message SendVenue(Chat chat, Location location, string title = null, string address = null, string foursquareId = null, string foursquareType = null, bool disableNotification = false, Message replyToMessage = null)
         {
-            if (chat == null || location == null)
-                throw new ArgumentNullException();
+            Require(chat, location);
 
             var parameters = new List<QueryStringParameter>
             {
@@ -606,8 +604,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>On success, the sent Message is returned.</returns>
         public Message SendContact(Chat chat, string phoneNumber, string firstName, string lastName = null, string vcard = null, bool disableNotification = false, Message replyToMessage = null)
         {
-            if (chat == null || phoneNumber == null || firstName == null)
-                throw new ArgumentNullException();
+            Require(chat, phoneNumber, firstName);
 
             if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(firstName))
                 throw new ArgumentException();
@@ -645,6 +642,8 @@ namespace nerderies.TelegramBotApi
         /// <returns>True if successful</returns>
         public bool SendChatAction(Chat chat, ChatAction chatAction)
         {
+            Require(chat, chatAction);
+
             var parameters = new List<QueryStringParameter>()
             {
                 new QueryStringParameter("chat_id", chat.Id.ToString()),
@@ -668,8 +667,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>A list of Photosize arrays, where each list element contains different qualities of the photo in an array</returns>
         public IList<PhotoSize[]> GetUserProfilePhotos(User user, int maxPhotos = int.MaxValue)
         {
-            if (user == null)
-                throw new ArgumentNullException();
+            Require(user);
 
             var parameters = new List<QueryStringParameter>
             {
@@ -714,8 +712,7 @@ namespace nerderies.TelegramBotApi
         /// <returns></returns>
         public FileDescriptor GetFile(string fileId)
         {
-            if (fileId == null)
-                throw new ArgumentNullException();
+            Require(fileId);
 
             var id = new QueryStringParameter("file_id", fileId);
             var reply = _communicator.GetReply<GetFileReply>("getFile", id);
@@ -743,8 +740,7 @@ namespace nerderies.TelegramBotApi
         /// <returns></returns>
         public string ExportChatInviteLink(Chat chat)
         {
-            if (chat == null)
-                throw new ArgumentNullException();
+            Require(chat);
 
             var reply = _communicator.GetReply<ExportChatInviteLinkReply>("exportChatInviteLink", new QueryStringParameter("chat_id", chat.Id.ToString()));
             if (reply.Ok)
@@ -759,8 +755,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>true on success</returns>
         public bool SetChatPhoto(Chat chat, InputFile photo)
         {
-            if (chat == null || photo == null)
-                throw new ArgumentNullException();
+            Require(chat, photo);
 
             var reply = _communicator.GetMultiPartReply<SetChatPhotoReply>("setChatPhoto",
                 new MultiPartStringParameter("chat_id", chat.Id.ToString()),
@@ -775,8 +770,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>true on success</returns>
         public bool DeleteChatPhoto(Chat chat)
         {
-            if (chat == null)
-                throw new ArgumentNullException();
+            Require(chat);
 
             var reply = _communicator.GetMultiPartReply<DeleteChatPhotoReply>("deleteChatPhoto",
                 new MultiPartStringParameter("chat_id", chat.Id.ToString()));
@@ -790,8 +784,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>true on success</returns>
         public bool SetChatTitle(Chat chat, string title)
         {
-            if (chat == null || title == null)
-                throw new ArgumentNullException();
+            Require(chat, title);
 
             if (title.Length > 255  || title.Length < 1)
                 throw new ArgumentException("title must be between 1 and 255 characters");
@@ -809,8 +802,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>true on success</returns>
         public bool SetChatDescription(Chat chat, string description)
         {
-            if (chat == null || description == null)
-                throw new ArgumentNullException();
+            Require(chat, description);
 
             if (description.Length > 255)
                 throw new ArgumentException("title must be between 0 and 255 characters");
@@ -828,8 +820,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>true on success</returns>
         public bool PinChatMessage(Message message)
         {
-            if (message == null)
-                throw new ArgumentNullException();
+            Require(message);
 
             var reply = _communicator.GetReply<PinChatMessageReply>("pinChatMessage",
                 new QueryStringParameter("chat_id", message.Chat.Id.ToString()),
@@ -844,8 +835,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>true on success</returns>
         public bool UnpinChatMessage(Chat chat)
         {
-            if (chat == null)
-                throw new ArgumentNullException();
+            Require(chat);
 
             var reply = _communicator.GetReply<UnpinChatMessageReply>("unpinChatMessage",
                 new QueryStringParameter("chat_id", chat.Id.ToString()));
@@ -860,8 +850,7 @@ namespace nerderies.TelegramBotApi
         //this is not integration tested due to the lack of a JOIN CHAT method
         public bool LeaveChat(Chat chat)
         {
-            if (chat == null)
-                throw new ArgumentNullException();
+            Require(chat);
 
             var reply = _communicator.GetReply<LeaveChatReply>("leaveChat",
                 new QueryStringParameter("chat_id", chat.Id.ToString()));
@@ -890,8 +879,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>returns an Array of ChatMembers that contains information about all chat administrators except other bots</returns>
         public IList<ChatMember> GetChatAdministrators(Chat chat)
         {
-            if (chat == null)
-                throw new ArgumentNullException();
+            Require(chat);
 
             var reply = _communicator.GetReply<GetChatAdministratorsReply>("getChatAdministrators",
                 new QueryStringParameter("chat_id", chat.Id.ToString()));
@@ -908,8 +896,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>the number of members in a chat</returns>
         public long GetChatMembersCount(Chat chat)
         {
-            if (chat == null)
-                throw new ArgumentNullException();
+            Require(chat);
 
             var reply = _communicator.GetReply<GetChatMembersCountReply>("getChatMembersCount",
                 new QueryStringParameter("chat_id", chat.Id.ToString()));
@@ -927,8 +914,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>Returns a ChatMember object on success.</returns>
         public ChatMember GetChatMember(Chat chat, User user)
         {
-            if (user == null)
-                throw new ArgumentNullException();
+            Require(user, chat);
 
             return GetChatMember(chat, user.Id);
         }
@@ -940,8 +926,7 @@ namespace nerderies.TelegramBotApi
         /// <returns>Returns a ChatMember object on success.</returns>
         public ChatMember GetChatMember(Chat chat, long userId)
         {
-            if (chat == null)
-                throw new ArgumentNullException();
+            Require(chat);
 
             var reply = _communicator.GetReply<GetChatMemberReply>("getChatMember",
                 new QueryStringParameter("chat_id", chat.Id.ToString()),
@@ -960,8 +945,7 @@ namespace nerderies.TelegramBotApi
         //TODO integration test is missing 
         public bool SetChatStickerSet(Chat chat, string stickerSetName)
         {
-            if (chat == null || stickerSetName == null)
-                throw new ArgumentNullException();
+            Require(chat, stickerSetName);
 
             if (string.IsNullOrEmpty(stickerSetName))
                 throw new ArgumentException("stickerSetName was empty");
@@ -980,8 +964,7 @@ namespace nerderies.TelegramBotApi
         //TODO integration test is missing
         public bool DeleteChatStickerSet(Chat chat)
         {
-            if (chat == null)
-                throw new ArgumentNullException();
+            Require(chat);
 
             var reply = _communicator.GetReply<DeleteChatStickerSetReply>("setChatStickerSet",
                 new QueryStringParameter("chat_id", chat.Id.ToString()));
