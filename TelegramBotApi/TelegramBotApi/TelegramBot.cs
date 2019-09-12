@@ -637,6 +637,36 @@ namespace nerderies.TelegramBotApi
         }
 
         /// <summary>
+        /// Posts a Poll into a chat
+        /// </summary>
+        /// <returns>on success, the sent message is returned</returns>
+        public Message SendPoll(Chat chat, string question, string[] options, bool disableNotification = false, Message replyToMessage = null)
+        {
+            Require(chat, question, options);
+
+            var parameters = new List<QueryStringParameter>
+            {
+                new QueryStringParameter("chat_id", chat.Id.ToString()),
+                new QueryStringParameter("question", question),
+                new QueryStringParameter("options", options)
+            };
+
+       
+            if (disableNotification)
+                parameters.Add(new QueryStringParameter("disable_notification", disableNotification.ToString()));
+
+            if (replyToMessage != null)
+                parameters.Add(new QueryStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
+
+            var result = _communicator.GetReply<SendPollReply>("sendPoll", parameters.ToArray());
+           
+            if (result.Ok)
+                return result.SentMessage;
+            else
+                return null;
+        }
+
+        /// <summary>
         /// The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients also clear your bot status)
         /// </summary>
         /// <returns>True if successful</returns>

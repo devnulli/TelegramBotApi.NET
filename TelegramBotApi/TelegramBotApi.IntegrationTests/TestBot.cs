@@ -180,6 +180,13 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         }
 
         [Test]
+        public void SendPoll_Returns()
+        {
+            var m1 = _b.SendPoll(_testChannelPost.Chat, "Is truth in wine?", new string[] { "Aye", "Nay", "in white wine", "in red wine" }, false, replyToMessage: _testChannelPost);
+            Assert.NotNull(m1);
+        }
+
+        [Test]
         public void SendLocation_Returns()
         {
             var m1 = _b.SendLocation(_testMessage.Chat, new Location() { Latitude = 48.305859, Longitude = 14.286459 }, replyToMessage: _testMessage);
