@@ -35,7 +35,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             }
             catch
             {
-                throw new Exception($"You must first (A) set up a test bot for integration testing (B) make sure that there is a *.testtoken file containing the bots token in {documentsPath} (C) The bot must have at least one message (D) The bot must have at least one channelupdate");
+                throw new Exception($"You must first (A) set up a test bot for integration testing (B) make sure that there is a *.testtoken file containing the bots token in {documentsPath} (C) The bot must have at least one unconsumed message in a group (D) The bot must have at least one unconsumed message in a channel");
             }
         }
 
