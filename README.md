@@ -1,6 +1,6 @@
 # TelegramBotApi.NET
 
-This is an implementation for the Telegram Bot API that targets .NET Standard 2.0
+This is an implementation for the Telegram Bot API that targets .NET Core (currently 3.1)
 
 It is designed for simple use, so that beginners can use Telegram Bots for fun, house automation, whatever.
 Although its for simple use, the target is to keep track and implement all of Telegrams API in this one dll.
