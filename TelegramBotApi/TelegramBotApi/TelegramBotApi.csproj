@@ -16,7 +16,10 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
-    <PackageReleaseNotes>0.8.0.0
+    <PackageReleaseNotes>0.8.0.1
+ - (changed integration tests) pinning in private chats is now supported
+
+0.8.0.0
 - library was switched from the discontinued .Net Standard 2.0 to .Net Core 3.1
 
 0.5.1.8 (2019-09-12)
@@ -51,6 +54,8 @@
 
 </PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <AssemblyVersion>0.8.0.1</AssemblyVersion>
+    <FileVersion>0.8.0.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
