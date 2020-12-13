@@ -351,13 +351,15 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             var privateMessage = _b.SendMessage(_testMessage.Chat, "pinning this should fail");
             Assert.That(_b.PinChatMessage(channelMessage));
             Assert.That(_b.UnpinChatMessage(channelMessage.Chat));
+
             //reaction on no present message
             Assert.Throws<WebException>(()=>_b.UnpinChatMessage(channelMessage.Chat));
 
-            Assert.Throws<WebException>(() => _b.PinChatMessage(privateMessage));
+            //pinning in private chat
+            Assert.That(_b.PinChatMessage(privateMessage));
 
-            //reaction on unpinnin in private chat
-            Assert.Throws<WebException>(() => _b.UnpinChatMessage(privateMessage.Chat));
+            //unpinnin in private chat
+            Assert.That(_b.UnpinChatMessage(privateMessage.Chat));
         }
 
         [Test]
