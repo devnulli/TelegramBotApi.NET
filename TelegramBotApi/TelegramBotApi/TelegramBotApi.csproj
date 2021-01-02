@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>nerderies.TelegramBotApi</RootNamespace>
     <AssemblyName>TelegramBotApi</AssemblyName>
-    <Version>0.8.0.0</Version>
+    <Version>0.8.0.1</Version>
     <Authors>devnulli</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>nerderies.TelegramBotApi</PackageId>
@@ -17,7 +17,8 @@
     <OutputType>Library</OutputType>
     <StartupObject />
     <PackageReleaseNotes>0.8.0.1
- - (changed integration tests) pinning in private chats is now supported
+ - library was switched to .Net Core 5.0
+ - (changed integration tests) pinning in private chats is now supported - this is not an integration test failure
 
 0.8.0.0
 - library was switched from the discontinued .Net Standard 2.0 to .Net Core 3.1
