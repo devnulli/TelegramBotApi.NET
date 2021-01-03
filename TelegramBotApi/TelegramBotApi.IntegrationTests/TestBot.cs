@@ -51,6 +51,20 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         }
 
         [Test]
+        public void EditMessageText_Basic()
+        {
+            //when we send a message to the bot 
+            var originalMessage = _b.SendMessage(_testMessage.Chat, "EditMessageText (unmodified)", replyToMessage: _testMessage);
+            //and we modify it
+            var newMessage = _b.EditMessageText(originalMessage, "EditMessageText (modified)");
+            
+            //we should receive the updated message
+            Assert.IsNotNull(newMessage);
+            Assert.That(newMessage.Text == "EditMessageText (modified)");
+            Assert.That(newMessage.MessageId == originalMessage.MessageId);
+        }
+
+        [Test]
         public void SendMessage_Basic_Returns()
         {
             Assert.NotNull(_b.SendMessage(_testMessage.Chat, "SendMessage_Basic_Returns") != null);

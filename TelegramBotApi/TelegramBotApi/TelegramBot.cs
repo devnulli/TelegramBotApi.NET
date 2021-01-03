@@ -509,6 +509,37 @@ namespace nerderies.TelegramBotApi
         }
 
         /// <summary>
+        /// edit a text message that was sent by the bot. 
+        /// </summary>
+        /// <returns>the updated message, when successful</returns>
+        public Message EditMessageText(Message message, string newText, MarkdownStyles markdownStyle = MarkdownStyles.None)
+        {
+            Require(message, newText);
+
+            if (newText.Length > Constants.MaxTextLength)
+                newText = newText.Substring(0, Constants.MaxTextLength - 3) + "...";
+
+            var parameters = new List<QueryStringParameter>()
+            {
+                new QueryStringParameter("chat_id", message.Chat.Id.ToString()),
+                new QueryStringParameter("message_id", message.MessageId.ToString()),
+                new QueryStringParameter("text", newText)
+            };
+
+            if (markdownStyle != MarkdownStyles.None)
+            {
+                parameters.Add(new QueryStringParameter("parse_mode", Enum.GetName(typeof(MarkdownStyles), markdownStyle)));
+            }
+
+            var result = _communicator.GetReply<EditMessageTextReply>("editMessageText", parameters.ToArray());
+
+            if (result.Ok)
+                return result.UpdatedMessage;
+            else
+                return null;
+        }
+
+        /// <summary>
         /// edit live location messages sent by the bot or via the bot (for inline bots). A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation
         /// </summary>
         /// <returns>true if successful, also sets the sentMessage out parameter when the edited message was sent by the bot</returns>
