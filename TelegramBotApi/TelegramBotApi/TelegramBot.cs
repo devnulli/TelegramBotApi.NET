@@ -41,7 +41,7 @@ namespace nerderies.TelegramBotApi
         #region private operations
         private void Require(params object[] objects)
         {
-            foreach(var o in objects)
+            foreach (var o in objects)
             {
                 if (o == null)
                     throw new ArgumentNullException();
@@ -86,11 +86,11 @@ namespace nerderies.TelegramBotApi
             }
             else
             {
-               reply = _communicator.GetReply<UpdateReply>("getUpdates", requestlimit);
+                reply = _communicator.GetReply<UpdateReply>("getUpdates", requestlimit);
             }
 
             //set offset for next pull
-           if (reply.Updates.Length > 0)
+            if (reply.Updates.Length > 0)
                 _updateOffset = reply.Updates[reply.Updates.Length - 1].UpdateId + 1;
 
             return new List<Update>(reply.Updates);
@@ -126,12 +126,12 @@ namespace nerderies.TelegramBotApi
                 new QueryStringParameter("text", text)
             };
 
-            if(markdownStyle!= MarkdownStyles.None)
+            if (markdownStyle != MarkdownStyles.None)
             {
                 parameters.Add(new QueryStringParameter("parse_mode", Enum.GetName(typeof(MarkdownStyles), markdownStyle)));
             }
 
-            if(disableWebPagePreview)
+            if (disableWebPagePreview)
             {
                 parameters.Add(new QueryStringParameter("disable_web_page_preview", true.ToString()));
             }
@@ -193,7 +193,7 @@ namespace nerderies.TelegramBotApi
                 photo.GetMultiPartParameter("photo")
             };
 
-            if(!string.IsNullOrEmpty(caption))
+            if (!string.IsNullOrEmpty(caption))
             {
                 parameters.Add(new MultiPartStringParameter("caption", caption));
             }
@@ -241,7 +241,7 @@ namespace nerderies.TelegramBotApi
             if (markdownStyle != MarkdownStyles.None)
                 parameters.Add(new MultiPartStringParameter("parse_mode", Enum.GetName(typeof(MarkdownStyles), markdownStyle)));
 
-            if(duration > long.MinValue)
+            if (duration > long.MinValue)
                 parameters.Add(new MultiPartStringParameter("duration", duration.ToString()));
 
             if (!string.IsNullOrEmpty(performer))
@@ -271,7 +271,7 @@ namespace nerderies.TelegramBotApi
         /// sends a document to the chat
         /// </summary>
         /// <returns>on success, the sent message is returned</returns>
-        public Message SendDocument(Chat chat, InputFile document, InputFile thumb = null, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool disableNotification = false, Message replyToMessage = null )
+        public Message SendDocument(Chat chat, InputFile document, InputFile thumb = null, string caption = null, MarkdownStyles markdownStyle = MarkdownStyles.None, bool disableNotification = false, Message replyToMessage = null)
         {
             Require(chat, document);
 
@@ -603,7 +603,7 @@ namespace nerderies.TelegramBotApi
                 new QueryStringParameter("longitude", location.Longitude.ToString(CultureInfo.InvariantCulture))
             };
 
-            if(!string.IsNullOrEmpty(title))
+            if (!string.IsNullOrEmpty(title))
                 parameters.Add(new QueryStringParameter("title", title));
 
             if (!string.IsNullOrEmpty(address))
@@ -682,7 +682,7 @@ namespace nerderies.TelegramBotApi
                 new QueryStringParameter("options", options)
             };
 
-       
+
             if (disableNotification)
                 parameters.Add(new QueryStringParameter("disable_notification", disableNotification.ToString()));
 
@@ -690,7 +690,7 @@ namespace nerderies.TelegramBotApi
                 parameters.Add(new QueryStringParameter("reply_to_message_id", replyToMessage.MessageId.ToString()));
 
             var result = _communicator.GetReply<SendPollReply>("sendPoll", parameters.ToArray());
-           
+
             if (result.Ok)
                 return result.SentMessage;
             else
@@ -739,7 +739,7 @@ namespace nerderies.TelegramBotApi
             long stepsize = 100;
             var offsetParameter = new QueryStringParameter("offset", offset.ToString());
             var stepSizeParameter = new QueryStringParameter("limit", maxPhotos < stepsize ? maxPhotos.ToString() : stepsize.ToString());
-            
+
 
             parameters.Add(offsetParameter);
             parameters.Add(stepSizeParameter);
@@ -847,7 +847,7 @@ namespace nerderies.TelegramBotApi
         {
             Require(chat, title);
 
-            if (title.Length > 255  || title.Length < 1)
+            if (title.Length > 255 || title.Length < 1)
                 throw new ArgumentException("title must be between 1 and 255 characters");
 
             var reply = _communicator.GetReply<SetChatTitleReply>("setChatTitle",
@@ -891,14 +891,37 @@ namespace nerderies.TelegramBotApi
         }
 
         /// <summary>
-        /// unpins messages from the chat
+        /// unpins a message from the chat. if the message is not given, it will unpin the most recently pinned message from the chat
         /// </summary>
         /// <returns>true on success</returns>
-        public bool UnpinChatMessage(Chat chat)
+        public bool UnpinChatMessage(Chat chat, Message message = null)
         {
             Require(chat);
 
-            var reply = _communicator.GetReply<UnpinChatMessageReply>("unpinChatMessage",
+            var parameters = new List<QueryStringParameter>
+            {
+                new QueryStringParameter("chat_id", chat.Id.ToString())
+            };
+
+            if (message != null)
+            {
+                parameters.Add(new QueryStringParameter("message_id", message.MessageId.ToString()));
+            }
+
+            var reply = _communicator.GetReply<UnpinChatMessageReply>("unpinChatMessage", parameters.ToArray());
+
+            return reply.Ok && reply.Success;
+        }
+
+        /// <summary>
+        /// unpins all pinned messages from given chat
+        /// </summary>
+        /// <returns>true on success</returns>
+        public bool UnpinAllChatMessages(Chat chat)
+        {
+            Require(chat);
+
+            var reply = _communicator.GetReply<UnpinAllChatMessagesReply>("unpinAllChatMessages",
                 new QueryStringParameter("chat_id", chat.Id.ToString()));
 
             return reply.Ok && reply.Success;
@@ -966,7 +989,7 @@ namespace nerderies.TelegramBotApi
                 return reply.ChatMembersCount;
             else
                 throw new Exception("Could not get ChatMembers count for this chat");
-            
+
         }
 
         /// <summary>

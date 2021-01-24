@@ -1,5 +1,5 @@
 ﻿using nerderies.TelegramBotApi.Converters;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using System;
 
 namespace nerderies.TelegramBotApi.DTOS
@@ -8,145 +8,189 @@ namespace nerderies.TelegramBotApi.DTOS
     {
         //complete API as of 2019-01-10
 
-        [JsonProperty("message_id")]
+        [JsonPropertyName("message_id")]
+        [JsonInclude]
         public long MessageId;
 
-        [JsonProperty("from")]
+        [JsonPropertyName("from")]
+        [JsonInclude]
         public User From;
 
-        [JsonProperty("date")]
+        [JsonPropertyName("date")]
+        [JsonInclude]
         public long DateInUnixTime;
 
         [JsonIgnore]
         public DateTime Date => UnixToDateTimeConverter.Convert(DateInUnixTime);
 
-        [JsonProperty("chat")]
+        [JsonPropertyName("chat")]
+        [JsonInclude]
         public Chat Chat;
 
-        [JsonProperty("forward_from")]
+        [JsonPropertyName("forward_from")]
+        [JsonInclude]
         public User ForwardFrom;
 
-        [JsonProperty("forward_from_chat")]
+        [JsonPropertyName("forward_from_chat")]
+        [JsonInclude]
         public Chat ForwardFromChat;
 
-        [JsonProperty("forward_from_message_id")]
+        [JsonPropertyName("forward_from_message_id")]
+        [JsonInclude]
         public long ForwardFromMessageId;
 
-        [JsonProperty("forward_signature")]
+        [JsonPropertyName("forward_signature")]
+        [JsonInclude]
         public string ForwardSignature;
 
-        [JsonProperty("forward_date")]
+        [JsonPropertyName("forward_date")]
+        [JsonInclude]
         public long ForwardDateInUnixTime;
 
         [JsonIgnore]
         public DateTime ForwardDate => UnixToDateTimeConverter.Convert(ForwardDateInUnixTime);
 
-        [JsonProperty("reply_to_message")]
+        [JsonPropertyName("reply_to_message")]
+        [JsonInclude]
         public Message ReplyToMessage;
 
-        [JsonProperty("edit_date")]
+        [JsonPropertyName("edit_date")]
+        [JsonInclude]
         public long EditDateInUnixTime;
 
         [JsonIgnore]
         public DateTime EditDate => UnixToDateTimeConverter.Convert(EditDateInUnixTime);
 
-        [JsonProperty("media_group_id")]
+        [JsonPropertyName("media_group_id")]
+        [JsonInclude]
         public string MediaGroupId;
 
-        [JsonProperty("author_signature")]
+        [JsonPropertyName("author_signature")]
+        [JsonInclude]
         public string AuthorSignature;
 
-        [JsonProperty("text")]
+        [JsonPropertyName("text")]
+        [JsonInclude]
         public string Text;
 
-        [JsonProperty("entities")]
+        [JsonPropertyName("entities")]
+        [JsonInclude]
         public MessageEntity[] Entities;
 
-        [JsonProperty("caption_entities")]
+        [JsonPropertyName("caption_entities")]
+        [JsonInclude]
         public MessageEntity[] CaptionEntities;
 
-        [JsonProperty("audio")]
+        [JsonPropertyName("audio")]
+        [JsonInclude]
         public Audio Audio;
 
-        [JsonProperty("document")]
+        [JsonPropertyName("document")]
+        [JsonInclude]
         public Document Document;
 
-        [JsonProperty("animation")]
+        [JsonPropertyName("animation")]
+        [JsonInclude]
         public Animation Animation;
 
-        [JsonProperty("game")]
+        [JsonPropertyName("game")]
+        [JsonInclude]
         public Game Game;
 
-        [JsonProperty("photo")]
+        [JsonPropertyName("photo")]
+        [JsonInclude]
         public PhotoSize[] Photos;
 
-        [JsonProperty("sticker")]
+        [JsonPropertyName("sticker")]
+        [JsonInclude]
         public Sticker Sticker;
 
-        [JsonProperty("video")]
+        [JsonPropertyName("video")]
+        [JsonInclude]
         public Video Video;
 
-        [JsonProperty("voice")]
+        [JsonPropertyName("voice")]
+        [JsonInclude]
         public Voice Voice;
 
-        [JsonProperty("video_note")]
+        [JsonPropertyName("video_note")]
+        [JsonInclude]
         public VideoNote VideoNote;
 
-        [JsonProperty("caption")]
+        [JsonPropertyName("caption")]
+        [JsonInclude]
         public string Caption;
 
-        [JsonProperty("contact")]
+        [JsonPropertyName("contact")]
+        [JsonInclude]
         public Contact Contact;
 
-        [JsonProperty("location")]
+        [JsonPropertyName("location")]
+        [JsonInclude]
         public Location Location;
 
-        [JsonProperty("venue")]
+        [JsonPropertyName("venue")]
+        [JsonInclude]
         public Venue Venue;
 
-        [JsonProperty("new_chat_members")]
+        [JsonPropertyName("new_chat_members")]
+        [JsonInclude]
         public User[] NewChatMembers;
 
-        [JsonProperty("left_chat_members")]
+        [JsonPropertyName("left_chat_members")]
+        [JsonInclude]
         public User[] LeftChatMembers;
 
-        [JsonProperty("new_chat_title")]
+        [JsonPropertyName("new_chat_title")]
+        [JsonInclude]
         public string NewChatTitle;
 
-        [JsonProperty("new_chat_photo")]
+        [JsonPropertyName("new_chat_photo")]
+        [JsonInclude]
         public PhotoSize[] NewChatPhotos;
 
-        [JsonProperty("delete_chat_photo")]
+        [JsonPropertyName("delete_chat_photo")]
+        [JsonInclude]
         public bool DeleteChatPhoto;
 
-        [JsonProperty("group_chat_created")]
+        [JsonPropertyName("group_chat_created")]
+        [JsonInclude]
         public bool GroupChatCreated;
 
-        [JsonProperty("supergroup_chat_created")]
+        [JsonPropertyName("supergroup_chat_created")]
+        [JsonInclude]
         public bool SuperGroupChatCreated;
 
-        [JsonProperty("channel_chat_created")]
+        [JsonPropertyName("channel_chat_created")]
+        [JsonInclude]
         public bool ChannelChatCreated;
 
-        [JsonProperty("migrate_to_chat_id")]
+        [JsonPropertyName("migrate_to_chat_id")]
+        [JsonInclude]
         public long MigrateToChatId;
 
-        [JsonProperty("migrate_from_chat_id")]
+        [JsonPropertyName("migrate_from_chat_id")]
+        [JsonInclude]
         public long MigrateFromChatId;
 
-        [JsonProperty("pinned_message")]
+        [JsonPropertyName("pinned_message")]
+        [JsonInclude]
         public Message PinnedMessage;
 
-        [JsonProperty("invoice")]
+        [JsonPropertyName("invoice")]
+        [JsonInclude]
         public Invoice Invoice;
 
-        [JsonProperty("successful_payment")]
+        [JsonPropertyName("successful_payment")]
+        [JsonInclude]
         public SuccessfulPayment SuccessfulPayment;
 
-        [JsonProperty("connected_website")]
+        [JsonPropertyName("connected_website")]
+        [JsonInclude]
         public string ConnectedWebsite;
 
-        [JsonProperty("passport_data")]
+        [JsonPropertyName("passport_data")]
+        [JsonInclude]
         public PassportData PassportData;
     }
 }

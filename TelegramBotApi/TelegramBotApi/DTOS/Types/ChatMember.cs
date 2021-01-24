@@ -1,6 +1,6 @@
 ﻿using nerderies.TelegramBotApi.Converters;
-using Newtonsoft.Json;
 using System;
+using System.Text.Json.Serialization;
 
 namespace nerderies.TelegramBotApi.DTOS
 {
@@ -8,55 +8,71 @@ namespace nerderies.TelegramBotApi.DTOS
     {
         //complete API as of 2019-02-23
 
-        [JsonProperty("user")]
+        [JsonPropertyName("user")]
+        [JsonInclude]
         public User user;
 
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
+        [JsonInclude]
         public string Status;
 
-        [JsonProperty("until_date")]
+        [JsonPropertyName("until_date")]
+        [JsonInclude]
         public long UntilDateInUnixTime;
 
         [JsonIgnore]
         public DateTime Date => UnixToDateTimeConverter.Convert(UntilDateInUnixTime);
 
-        [JsonProperty("can_be_edited")]
+        [JsonPropertyName("can_be_edited")]
+        [JsonInclude]
         public bool? CanBeEdited;
 
-        [JsonProperty("can_change_info")]
+        [JsonPropertyName("can_change_info")]
+        [JsonInclude]
         public bool? CanChangeInfo;
 
-        [JsonProperty("can_post_messages")]
+        [JsonPropertyName("can_post_messages")]
+        [JsonInclude]
         public bool? CanPostMessages;
 
-        [JsonProperty("can_edit_messages")]
+        [JsonPropertyName("can_edit_messages")]
+        [JsonInclude]
         public bool? CanEditMessages;
 
-        [JsonProperty("can_delete_messages")]
+        [JsonPropertyName("can_delete_messages")]
+        [JsonInclude]
         public bool? CanDeleteMessages;
 
-        [JsonProperty("can_invite_users")]
+        [JsonPropertyName("can_invite_users")]
+        [JsonInclude]
         public bool? CanInviteUsers;
 
-        [JsonProperty("can_restrict_members")]
+        [JsonPropertyName("can_restrict_members")]
+        [JsonInclude]
         public bool? CanRestrictMembers;
 
-        [JsonProperty("can_pin_messages")]
+        [JsonPropertyName("can_pin_messages")]
+        [JsonInclude]
         public bool? CanPinMessages;
 
-        [JsonProperty("can_promote_members")]
+        [JsonPropertyName("can_promote_members")]
+        [JsonInclude]
         public bool? CanPromoteMembers;
 
-        [JsonProperty("can_send_messages")]
+        [JsonPropertyName("can_send_messages")]
+        [JsonInclude]
         public bool? CanSendMessages;
 
-        [JsonProperty("can_send_media_messages")]
+        [JsonPropertyName("can_send_media_messages")]
+        [JsonInclude]
         public bool? CanSendMediaMessages;
 
-        [JsonProperty("can_send_other_messages")]
+        [JsonPropertyName("can_send_other_messages")]
+        [JsonInclude]
         public bool? CanSendOtherMessages;
 
-        [JsonProperty("can_add_web_page_previews")]
+        [JsonPropertyName("can_add_web_page_previews")]
+        [JsonInclude]
         public bool? CanAddWebPagePreviews;
     }
 }

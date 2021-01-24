@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace nerderies.TelegramBotApi.DTOS
 {
@@ -6,28 +6,36 @@ namespace nerderies.TelegramBotApi.DTOS
     {
         //complete API as of 2019-01-11
 
-        [JsonProperty("file_id")]
+        [JsonPropertyName("file_id")]
+        [JsonInclude]
         public string FileId;
 
-        [JsonProperty("width")]
+        [JsonPropertyName("width")]
+        [JsonInclude]
         public long Width;
 
-        [JsonProperty("height")]
+        [JsonPropertyName("height")]
+        [JsonInclude]
         public long Height;
 
-        [JsonProperty("duration")]
+        [JsonPropertyName("duration")]
+        [JsonInclude]
         public long Duration;
 
-        [JsonProperty("thumb")]
+        [JsonPropertyName("thumb")]
+        [JsonInclude]
         public PhotoSize Thumb;
 
-        [JsonProperty("file_name")]
+        [JsonPropertyName("file_name")]
+        [JsonInclude]
         public string FileName;
 
-        [JsonProperty("mime_type")]
+        [JsonPropertyName("mime_type")]
+        [JsonInclude]
         public string MimeType;
 
-        [JsonProperty("file_size")]
-        public string FileSize;
+        [JsonPropertyName("file_size")]
+        [JsonInclude]
+        public long FileSize;
     }
 }

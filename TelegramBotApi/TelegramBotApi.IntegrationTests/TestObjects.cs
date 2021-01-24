@@ -1,25 +1,31 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace nerderies.TelegramBotApi.IntegrationTests
 {
     public class TestObjects
     {
-        [JsonProperty("testaudio")]
+        [JsonPropertyName("testaudio")]
+        [JsonInclude]
         public byte[] TestAudio;
 
-        [JsonProperty("testthumb")]
+        [JsonPropertyName("testthumb")]
+        [JsonInclude]
         public byte[] TestThumb;
 
-        [JsonProperty("testvideo")]
+        [JsonPropertyName("testvideo")]
+        [JsonInclude]
         public byte[] TestVideo;
 
-        [JsonProperty("testphoto")]
+        [JsonPropertyName("testphoto")]
+        [JsonInclude]
         public byte[] TestPhoto;
 
-        [JsonProperty("testanimation")]
+        [JsonPropertyName("testanimation")]
+        [JsonInclude]
         public byte[] TestAnimation;
 
-        [JsonProperty("testvoice")]
+        [JsonPropertyName("testvoice")]
+        [JsonInclude]
         public byte[] TestVoice;
     }
 }

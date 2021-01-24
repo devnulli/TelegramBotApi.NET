@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace nerderies.TelegramBotApi.DTOS
 {
@@ -6,10 +6,12 @@ namespace nerderies.TelegramBotApi.DTOS
     {
         //complete API as of 2019-02-08
 
-        [JsonProperty("total_count")]
+        [JsonPropertyName("total_count")]
+        [JsonInclude]
         public long TotalCount;
 
-        [JsonProperty("photos")]
+        [JsonPropertyName("photos")]
+        [JsonInclude]
         public PhotoSize[][] Photos;
     }
 }

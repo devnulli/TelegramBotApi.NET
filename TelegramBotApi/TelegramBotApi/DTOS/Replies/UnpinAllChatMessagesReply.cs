@@ -2,10 +2,10 @@
 
 namespace nerderies.TelegramBotApi.DTOS
 {
-    public class SendLocationReply : Reply
+    public class UnpinAllChatMessagesReply : Reply
     {
         [JsonPropertyName("result")]
         [JsonInclude]
-        public Message SentMessage;
+        public bool Success;
     }
 }
