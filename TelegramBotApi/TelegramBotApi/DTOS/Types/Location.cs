@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace nerderies.TelegramBotApi.DTOS
 {
@@ -6,10 +6,12 @@ namespace nerderies.TelegramBotApi.DTOS
     {
         //complete API as of 2019-01-11
 
-        [JsonProperty("longitude")]
+        [JsonPropertyName("longitude")]
+        [JsonInclude]
         public double Longitude;
 
-        [JsonProperty("latitude")]
+        [JsonPropertyName("latitude")]
+        [JsonInclude]
         public double Latitude;
     }
 }

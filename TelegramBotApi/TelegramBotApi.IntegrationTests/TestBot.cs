@@ -1,10 +1,10 @@
 using nerderies.TelegramBotApi.DTOS;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
 
 namespace nerderies.TelegramBotApi.IntegrationTests
 {
@@ -21,7 +21,7 @@ namespace nerderies.TelegramBotApi.IntegrationTests
             string token = null;
             DirectoryInfo documentsPath = null;
             string json = File.ReadAllText("testobjects.json");
-            _testobjects = JsonConvert.DeserializeObject<TestObjects>(json);
+            _testobjects = JsonSerializer.Deserialize<TestObjects>(json);
 
             try
             {
@@ -33,9 +33,9 @@ namespace nerderies.TelegramBotApi.IntegrationTests
                 _testMessage = (from u in updates where u.Message != null select u.Message).First();
                 _testChannelPost = (from u in updates where u.ChannelPost != null select u.ChannelPost).First();
             }
-            catch
+            catch(Exception e)
             {
-                throw new Exception($"You must first (A) set up a test bot for integration testing (B) make sure that there is a *.testtoken file containing the bots token in {documentsPath} (C) The bot must have at least one unconsumed message in a group (D) The bot must have at least one unconsumed message in a channel");
+                throw new Exception($"You must first (A) set up a test bot for integration testing (B) make sure that there is a *.testtoken file containing the bots token in {documentsPath} (C) The bot must have at least one unconsumed message in a group (D) The bot must have at least one unconsumed message in a channel\nStacktrace and message:{e.Message}{e.StackTrace}");
             }
         }
 

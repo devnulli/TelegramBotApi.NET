@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace nerderies.TelegramBotApi.DTOS
 {
@@ -6,25 +6,32 @@ namespace nerderies.TelegramBotApi.DTOS
     {
         //complete API as of 2019-01-10
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
+        [JsonInclude]
         public string Id;
 
-        [JsonProperty("from")]
+        [JsonPropertyName("from")]
+        [JsonInclude]
         public User From;
 
-        [JsonProperty("message")]
+        [JsonPropertyName("message")]
+        [JsonInclude]
         public Message Message;
 
-        [JsonProperty("inline_message_id")]
+        [JsonPropertyName("inline_message_id")]
+        [JsonInclude]
         public string InlineMessageId;
 
-        [JsonProperty("chat_instance")]
+        [JsonPropertyName("chat_instance")]
+        [JsonInclude]
         public string ChatInstance;
 
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
+        [JsonInclude]
         public string Data;
 
-        [JsonProperty("game_short_name")]
+        [JsonPropertyName("game_short_name")]
+        [JsonInclude]
         public string GameShortName;
     }
 }

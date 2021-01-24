@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace nerderies.TelegramBotApi.DTOS
 {
@@ -6,34 +6,44 @@ namespace nerderies.TelegramBotApi.DTOS
     {
         //complete API as of 2019-01-11
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
+        [JsonInclude]
         public string Type;
 
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
+        [JsonInclude]
         public string Data;
 
-        [JsonProperty("phone_number")]
+        [JsonPropertyName("phone_number")]
+        [JsonInclude]
         public string PhoneNumber;
 
-        [JsonProperty("email")]
+        [JsonPropertyName("email")]
+        [JsonInclude]
         public string Email;
 
-        [JsonProperty("files")]
+        [JsonPropertyName("files")]
+        [JsonInclude]
         public PassportFile[] Files;
 
-        [JsonProperty("front_side")]
+        [JsonPropertyName("front_side")]
+        [JsonInclude]
         public PassportFile FrontSide;
 
-        [JsonProperty("reverse_side")]
+        [JsonPropertyName("reverse_side")]
+        [JsonInclude]
         public PassportFile ReverseSide;
 
-        [JsonProperty("selfie")]
+        [JsonPropertyName("selfie")]
+        [JsonInclude]
         public PassportFile Selfie;
 
-        [JsonProperty("translation")]
+        [JsonPropertyName("translation")]
+        [JsonInclude]
         public PassportFile[] Translation;
 
-        [JsonProperty("hash")]
+        [JsonPropertyName("hash")]
+        [JsonInclude]
         public string Hash;
 }
 }

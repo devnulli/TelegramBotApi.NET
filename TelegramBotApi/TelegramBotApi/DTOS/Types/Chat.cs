@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace nerderies.TelegramBotApi.DTOS
 {
@@ -6,43 +6,56 @@ namespace nerderies.TelegramBotApi.DTOS
     {
         //complete API as of 2019-01-10
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
+        [JsonInclude]
         public long Id;
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
+        [JsonInclude]
         public string Type;
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
+        [JsonInclude]
         public string Title;
 
-        [JsonProperty("username")]
+        [JsonPropertyName("username")]
+        [JsonInclude]
         public string UserName;
 
-        [JsonProperty("first_name")]
+        [JsonPropertyName("first_name")]
+        [JsonInclude]
         public string FirstName;
 
-        [JsonProperty("last_name")]
+        [JsonPropertyName("last_name")]
+        [JsonInclude]
         public string LastName;
 
-        [JsonProperty("all_members_are_administrators")]
+        [JsonPropertyName("all_members_are_administrators")]
+        [JsonInclude]
         public bool AllMembersAreAdministrators;
 
-        [JsonProperty("photo")]
+        [JsonPropertyName("photo")]
+        [JsonInclude]
         public ChatPhoto Photo;
 
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
+        [JsonInclude]
         public string Description;
 
-        [JsonProperty("invite_link")]
+        [JsonPropertyName("invite_link")]
+        [JsonInclude]
         public string InviteLink;
 
-        [JsonProperty("pinned_message")]
+        [JsonPropertyName("pinned_message")]
+        [JsonInclude]
         public Message PinnedMessage;
 
-        [JsonProperty("sticker_set_name")]
+        [JsonPropertyName("sticker_set_name")]
+        [JsonInclude]
         public string StickerSetName;
 
-        [JsonProperty("can_set_sticker_set")]
+        [JsonPropertyName("can_set_sticker_set")]
+        [JsonInclude]
         public string CanSetStickerSet;
     }
 }

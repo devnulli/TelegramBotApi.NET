@@ -3,10 +3,10 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using nerderies.TelegramBotApi.DTOS;
 using nerderies.TelegramBotApi.Helpers;
 using nerderies.TelegramBotApi.Interfaces;
-using Newtonsoft.Json;
 
 [assembly: InternalsVisibleTo("TelegramBotApi.UnitTests")]
 namespace nerderies.TelegramBotApi
@@ -130,7 +130,9 @@ namespace nerderies.TelegramBotApi
 
             var json = GetRateLimitedMultipartReply(url, parameters);
 
-            return JsonConvert.DeserializeObject<T>(json);
+            T result = JsonSerializer.Deserialize<T>(json);
+
+            return result;
         }
 
         public T GetReply<T>(string operationName, params QueryStringParameter[] parameters) where T : Reply
@@ -139,7 +141,7 @@ namespace nerderies.TelegramBotApi
 
             var json = GetRateLimitedReply(url);
 
-            T result = JsonConvert.DeserializeObject<T>(json);
+            T result = JsonSerializer.Deserialize<T>(json);
 
             return result;
         }

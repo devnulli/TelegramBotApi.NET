@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace nerderies.TelegramBotApi.DTOS
 {
@@ -6,34 +6,44 @@ namespace nerderies.TelegramBotApi.DTOS
     {
         //complete API as of 2019-01-10
 
-        [JsonProperty("update_id")]
+        [JsonPropertyName("update_id")]
+        [JsonInclude]
         public long UpdateId;
 
-        [JsonProperty("message")]
+        [JsonPropertyName("message")]
+        [JsonInclude]
         public Message Message;
 
-        [JsonProperty("edited_message")]
+        [JsonPropertyName("edited_message")]
+        [JsonInclude]
         public Message EditedMessage;
 
-        [JsonProperty("channel_post")]
+        [JsonPropertyName("channel_post")]
+        [JsonInclude]
         public Message ChannelPost;
 
-        [JsonProperty("edited_channel_post")]
+        [JsonPropertyName("edited_channel_post")]
+        [JsonInclude]
         public Message EditedChannelPost;
 
-        [JsonProperty("inline_query")]
+        [JsonPropertyName("inline_query")]
+        [JsonInclude]
         public InlineQuery InlineQuery;
 
-        [JsonProperty("chosen_inline_result")]
+        [JsonPropertyName("chosen_inline_result")]
+        [JsonInclude]
         public ChosenInlineResult ChosenInlineResult;
 
-        [JsonProperty("callback_query")]
+        [JsonPropertyName("callback_query")]
+        [JsonInclude]
         public CallbackQuery CallbackQuery;
 
-        [JsonProperty("shipping_query")]
+        [JsonPropertyName("shipping_query")]
+        [JsonInclude]
         public ShippingQuery ShippingQuery;
 
-        [JsonProperty("pre_checkout_query")]
+        [JsonPropertyName("pre_checkout_query")]
+        [JsonInclude]
         public PreCheckoutQuery PreCheckoutQuery;
     }
 }

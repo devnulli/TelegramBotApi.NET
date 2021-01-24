@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace nerderies.TelegramBotApi.DTOS
 {
     public class UpdateReply : Reply
     {
-        [JsonProperty("result")]
+        [JsonPropertyName("result")]
+        [JsonInclude]
         public Update[] Updates;
     }
 }
