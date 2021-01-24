@@ -19,6 +19,7 @@
     <PackageReleaseNotes>0.8.0.3
 - removed newtonsoft.json dependency
 - implemented unpinAllChatMessages
+- allow unpinning of specific chat messages
 
 0.8.0.2
 - implemented editMessageText function

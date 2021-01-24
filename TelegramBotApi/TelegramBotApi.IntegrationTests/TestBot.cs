@@ -361,8 +361,9 @@ namespace nerderies.TelegramBotApi.IntegrationTests
         [Test]
         public void Pin_Unpin_ChatMessage_Returns()
         {
-            var channelMessage = _b.SendMessage(_testChannelPost.Chat, "pinned message");
-            var privateMessage = _b.SendMessage(_testMessage.Chat, "pinning this should fail");
+            var channelMessage = _b.SendMessage(_testChannelPost.Chat, "pinned message in a channel");
+            var privateMessage = _b.SendMessage(_testMessage.Chat, "pinned message in a private chat");
+
             Assert.That(_b.PinChatMessage(channelMessage));
             Assert.That(_b.UnpinChatMessage(channelMessage.Chat));
 
@@ -374,6 +375,20 @@ namespace nerderies.TelegramBotApi.IntegrationTests
 
             //unpinnin in private chat
             Assert.That(_b.UnpinChatMessage(privateMessage.Chat));
+
+            //pinning it again
+            Assert.That(_b.PinChatMessage(privateMessage));
+
+            //unpinning it by directly addressing it
+            Assert.That(_b.UnpinChatMessage(privateMessage.Chat, privateMessage));
+
+            //pinning it again
+            Assert.That(_b.PinChatMessage(privateMessage));
+
+            //unpinning all chat messages in a private chat
+            Assert.That(_b.UnpinAllChatMessages(privateMessage.Chat));
+            //unpinning all chat messages in a channel
+            Assert.That(_b.UnpinAllChatMessages(channelMessage.Chat));
         }
 
         [Test]
